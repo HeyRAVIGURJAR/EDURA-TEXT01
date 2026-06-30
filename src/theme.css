@@ -1,0 +1,239 @@
+/* ========================================
+   EDURA THEME SYSTEM — Premium Design Tokens
+   ======================================== */
+
+:root, [data-theme="dark"] {
+  /* Core Colors - Cinematic Dark Aesthetic */
+  --color-bg: #000000;
+  --color-bg-secondary: #0A0A0B;
+  --color-bg-tertiary: #18181B;
+  --color-surface: #0A0A0B;
+  --color-text: #F1F5F9;
+  --color-text-muted: #94A3B8;
+  --color-text-subtle: #64748B;
+  
+  /* Brand — Neon Purple + Deep Blue */
+  --color-primary: #8B5CF6;
+  --color-primary-light: #A855F7;
+  --color-secondary: #7C3AED;
+  --color-accent: #00BFFF;
+  --color-accent-secondary: #8B5CF6;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  
+  /* Premium Gradients */
+  --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #00BFFF 100%);
+  --gradient-hero: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 30%, #EC4899 60%, #00BFFF 100%);
+  --gradient-card: linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(0,191,255,0.06) 100%);
+  --gradient-glow: radial-gradient(ellipse at center, rgba(139,92,246,0.2) 0%, transparent 70%);
+  --gradient-border: linear-gradient(135deg, rgba(139,92,246,0.5), rgba(0,191,255,0.5));
+  --gradient-text: linear-gradient(135deg, #8B5CF6, #A855F7, #00BFFF);
+
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(10, 10, 11, 0.6);
+  --glass-bg-light: rgba(19, 19, 22, 0.4);
+  --glass-border: rgba(148, 163, 184, 0.08);
+  --glass-border-hover: rgba(148, 163, 184, 0.16);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Rarity Colors */
+  --rarity-common: #94A3B8;
+  --rarity-rare: #3B82F6;
+  --rarity-epic: #8B5CF6;
+  --rarity-legendary: #F59E0B;
+
+  /* Neon Accents */
+  --color-neon-primary: #8B5CF6;
+  --color-neon-secondary: #00BFFF;
+  --color-neon-accent: #EC4899;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.3);
+  --shadow-glow-lg: 0 0 80px rgba(139, 92, 246, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========================================
+   GLASS PANEL UTILITY
+   ======================================== */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.glass-panel:hover {
+  border-color: var(--glass-border-hover);
+}
+
+/* Gradient Border Card */
+.gradient-border-card {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-border);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+/* Neon Text Utility */
+.neon-text {
+  color: var(--color-text);
+  text-shadow: 
+    0 0 5px rgba(79, 70, 229, 0.2),
+    0 0 15px rgba(79, 70, 229, 0.3);
+  transition: text-shadow var(--transition-base), color var(--transition-base);
+}
+
+/* Animated Flowing Gradient Text (Premium Aesthetic) */
+@keyframes text-flow {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    to right,
+    #7928ca,
+    #ff0080,
+    #ff4d4d,
+    #00dfd8,
+    #7928ca
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: text-flow 5s linear infinite;
+}
+
+/* Premium Button (Keeping styles as fallback if GlowButton not used everywhere) */
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.45);
+}
+
+.btn-premium:active {
+  transform: translateY(0);
+}
+
+.btn-premium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.2) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.btn-premium:hover::after {
+  opacity: 1;
+}
+
+/* Ghost Button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+  background: rgba(79, 70, 229, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Metallic Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.metallic-shimmer {
+  background: linear-gradient(
+    to right, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.08) 50%, 
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite linear;
+}

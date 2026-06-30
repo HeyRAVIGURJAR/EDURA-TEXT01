@@ -1,0 +1,428 @@
+/* ========================================
+   GAMIFIED DASHBOARD — Premium Design
+   ======================================== */
+
+.gamified-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 100%;
+}
+
+/* Dashboard Header */
+.gd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.gd-greeting h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.gd-greeting p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.gd-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(239,68,68,0.15));
+  border: 1px solid rgba(245,158,11,0.2);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-warning, #F59E0B);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.gd-streak-badge .streak-flame {
+  font-size: 1.3rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Stats Row */
+.gd-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.gd-stat-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  transition: all var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gd-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--glass-border-hover);
+}
+
+.gd-stat-card .stat-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gd-stat-card .stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.gd-stat-card .stat-trend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.gd-stat-card .stat-trend.up {
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.gd-stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.gd-stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* Today's Goal Tracker */
+.gd-goal-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.gd-goal-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+}
+
+.gd-goal-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gd-progress-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.gd-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.gd-progress-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.gd-progress-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.gd-progress-bar {
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary);
+  overflow: hidden;
+  position: relative;
+}
+
+.gd-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.gd-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmerSlide 2s infinite;
+}
+
+/* Resume Learning */
+.gd-resume-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.gd-resume-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.gd-resume-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.35);
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.gd-resume-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(79, 70, 229, 0.5);
+}
+
+.gd-resume-btn::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  z-index: -1;
+  opacity: 0.3;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.gd-resume-time {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* League Card */
+.gd-league-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.gd-league-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+}
+
+.gd-league-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.league-tier-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  margin-bottom: 0.4rem;
+}
+
+.league-tier-row:hover {
+  background: var(--glass-bg-light);
+}
+
+.league-tier-row.current {
+  background: rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.league-tier-row .tier-emoji {
+  font-size: 1.2rem;
+  width: 28px;
+  text-align: center;
+}
+
+.league-tier-row .tier-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.league-tier-row .tier-req {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.league-tier-row .tier-check {
+  font-size: 0.8rem;
+  color: var(--color-success, #10B981);
+}
+
+/* XP Activity */
+.gd-xp-card {
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+}
+
+.gd-xp-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.xp-activity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  margin-bottom: 0.4rem;
+}
+
+.xp-activity-row:hover {
+  background: var(--glass-bg-light);
+}
+
+.xp-activity-row .xp-icon {
+  font-size: 1.1rem;
+  width: 28px;
+  text-align: center;
+}
+
+.xp-activity-row .xp-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.xp-activity-row .xp-reward {
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+  .gd-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gd-goal-section,
+  .gd-league-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .gamified-dashboard {
+    padding: 1rem;
+    padding-bottom: 5rem; /* space for bottom nav */
+  }
+
+  .gd-stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gd-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gd-stat-card .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+.dynamic-resume-bar {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 280px;
+  right: 1.5rem;
+  z-index: 890;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  padding: 1rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
+  transition: left 0.3s ease, bottom 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+  .dynamic-resume-bar {
+    left: 92px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dynamic-resume-bar {
+    left: 1rem;
+    right: 1rem;
+    bottom: 80px;
+  }
+}

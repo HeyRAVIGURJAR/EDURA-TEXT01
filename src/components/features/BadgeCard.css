@@ -1,0 +1,220 @@
+/* ========================================
+   PW THOR STYLE BATCH CARD STYLING
+   ======================================== */
+
+.pw-batch-card {
+  position: relative;
+  border-radius: var(--radius-xl, 16px);
+  background: var(--color-surface, #18181B);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: border-color var(--transition-base, 0.25s ease);
+}
+
+.pw-batch-card:hover {
+  border-color: rgba(138, 43, 226, 0.5);
+}
+
+/* Image Wrap */
+.pw-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+}
+
+.pw-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.pw-batch-card:hover .pw-thumbnail {
+  transform: scale(1.05);
+}
+
+/* Pink Hinglish Tag */
+.pw-language-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: #EC4899;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm, 6px);
+  box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Info Section */
+.pw-info-wrap {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  flex: 1;
+  position: relative;
+}
+
+.pw-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.pw-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text, #F1F5F9);
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Yellow New Badge */
+.pw-badge-new {
+  background: #F59E0B;
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Gray Details List */
+.pw-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pw-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted, #94A3B8);
+}
+
+.pw-detail-icon {
+  color: var(--color-text-subtle, #64748B);
+  flex-shrink: 0;
+}
+
+.pw-detail-text {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Pricing Row */
+.pw-pricing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.pw-price-free {
+  color: var(--color-success, #10B981);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.pw-free-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--color-success, #10B981);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+
+/* Like Button */
+.pw-like-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-subtle, #64748B);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pw-like-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.pw-like-btn.liked {
+  color: var(--color-primary, #8A2BE2);
+  background: rgba(138, 43, 226, 0.1);
+  border-color: rgba(138, 43, 226, 0.2);
+}
+
+/* Split Buttons at the Bottom */
+.pw-buttons-row {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+}
+
+.pw-btn {
+  flex: 1;
+  padding: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.pw-btn-study {
+  background: transparent;
+  color: #fff;
+  border-right: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+}
+
+.pw-btn-study:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pw-btn-unenroll {
+  background: #EF4444;
+  color: #fff;
+}
+
+.pw-btn-unenroll:hover {
+  background: #DC2626;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}

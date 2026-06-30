@@ -1,0 +1,489 @@
+/* ========================================
+   EDURA — Global Styles & Animation System
+   ======================================== */
+
+/* Reset and Base Styles */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
+/* Custom Dark Scrollbar to fix the white edge on Windows */
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #334155;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #475569;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    /* Premium dark slate theme for better readability */
+    @apply bg-[#0f172a] text-slate-200 overflow-x-hidden;
+    
+    /* Koi content copy nahi kar payega */
+    user-select: none; 
+    -webkit-user-select: none;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    transition: background-color var(--transition-smooth), color var(--transition-smooth);
+  }
+}
+
+@layer utilities {
+  /* Sirf Admin Dashboard me text copy hoga */
+  .admin-panel-container {
+    user-select: auto;
+    -webkit-user-select: auto;
+  }
+  
+  /* 3D Flashcard Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  /* Animated Flowing Gradient Border (Stitch.ai style) */
+  @keyframes border-spin {
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .stitch-border {
+    position: relative;
+    isolation: isolate;
+    border-radius: inherit;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+  }
+
+  .stitch-border::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: conic-gradient(from 0deg, transparent 0%, #8b5cf6 25%, #06b6d4 50%, #ec4899 75%, transparent 100%);
+    animation: border-spin 3s linear infinite;
+    z-index: -2;
+    will-change: transform;
+    transform: translate(-50%, -50%);
+  }
+
+  .stitch-border::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--stitch-bg, #0f172a);
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  /* Ghost Glow Card Styles */
+  .ghost-glow-card {
+    isolation: isolate;
+  }
+  .ghost-glow-card:hover {
+    box-shadow: 0 0 40px -10px rgba(168, 85, 247, 0.4);
+  }
+
+  .ghost-glow-aurora {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250%;
+    height: 250%;
+    background: conic-gradient(from 0deg, transparent 0%, #8b5cf6 25%, #06b6d4 50%, #ec4899 75%, transparent 100%);
+    filter: blur(20px);
+    opacity: 0.3;
+    animation: border-spin 6s linear infinite;
+    z-index: -2;
+    will-change: transform;
+    transform: translate(-50%, -50%);
+  }
+
+  .ghost-glow-mouse {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(168, 85, 247, 0.5),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .ghost-glow-card:hover .ghost-glow-mouse {
+    opacity: 1;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em; /* tighter tracking for premium feel */
+  line-height: 1.2;
+}
+
+/* Global 20% Spacing Increase for Sections */
+section {
+  padding-top: 6rem; /* increased from standard ~5rem */
+  padding-bottom: 6rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* Accessibility Focus Ring */
+*:focus-visible {
+  outline: 2px solid var(--color-primary, #8b5cf6);
+  outline-offset: 2px;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========================================
+   SCROLL-TRIGGERED ANIMATIONS
+   ======================================== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blur-reveal {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s ease;
+}
+
+.blur-reveal.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.slide-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger Delay Utilities */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+.stagger-6 { transition-delay: 0.6s; }
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(3deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(79, 70, 229, 0.35); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes morphBlob {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 70% / 40% 70% 60% 30%; }
+  75% { border-radius: 40% 30% 60% 50% / 60% 40% 70% 50%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmerSlide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes counterUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   LAYOUT UTILITIES
+   ======================================== */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Landing page layout — no sidebar */
+.app-container.landing-layout {
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+}
+
+/* Dashboard layout — with sidebar */
+.app-container.dashboard-layout {
+  flex-direction: row;
+}
+
+.main-content {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.bento-item {
+  min-height: 200px;
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.bento-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Section container for landing page sections */
+.section-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-subtle);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .section-container {
+    padding: 0 1rem;
+  }
+  
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   GLOBAL GLASS LASER SHINE SWEEP FOR BUTTONS
+   ======================================== */
+
+/* Target standard buttons (excluding stitch-border wrappers/buttons) */
+button:not(.stitch-border),
+.btn-premium,
+.btn-tactile-3d,
+.ad-broadcast-btn,
+.ad-cms-submit,
+.ad-logout-btn,
+.btn-premium-magnetic,
+.btn-ghost-custom {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+button:not(.stitch-border)::after,
+.btn-premium::after,
+.btn-tactile-3d::after,
+.ad-broadcast-btn::after,
+.ad-cms-submit::after,
+.btn-premium-magnetic::after,
+.btn-ghost-custom::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: sweepFlashRandom 4.5s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Target GlowButton inner shine */
+.animate-button-shine {
+  animation: sweepFlashRandom 4.5s infinite ease-in-out;
+}
+
+@keyframes sweepFlashRandom {
+  0% {
+    left: -150%;
+  }
+  25% {
+    left: 150%;
+  }
+  50% {
+    left: 150%;
+  }
+  75% {
+    left: -150%;
+  }
+  100% {
+    left: -150%;
+  }
+}

@@ -1,0 +1,43 @@
+#blob {
+  background: linear-gradient(
+    to right,
+    var(--color-neon-primary),
+    var(--color-neon-secondary)
+  );
+  height: 400px;
+  width: 400px;
+  position: fixed;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  z-index: 0;
+  animation: rotate 20s infinite;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.blob-blur {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: 0;
+  backdrop-filter: blur(150px);
+  -webkit-backdrop-filter: blur(150px);
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  
+  50% {
+    scale: 1 1.5;
+  }
+  
+  to {
+    rotate: 360deg;
+  }
+}

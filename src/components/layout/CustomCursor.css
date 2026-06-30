@@ -1,0 +1,40 @@
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+.cursor-outline {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9998;
+  transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+  /* Add slight lag/smoothness */
+  transition-property: top, left, width, height, border-color, background-color;
+  transition-duration: 0.15s, 0.15s, 0.2s, 0.2s, 0.2s, 0.2s;
+  transition-timing-function: ease-out;
+}
+
+.cursor-outline.hovering {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+  backdrop-filter: blur(2px);
+}
+
+/* Hide default cursor globally */
+* {
+  cursor: none !important;
+}

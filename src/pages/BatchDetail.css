@@ -1,0 +1,316 @@
+/* ========================================
+   BATCH DETAIL STYLING
+   ======================================== */
+
+.batch-detail-container {
+  padding: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.bd-back-row {
+  margin-bottom: 1rem;
+}
+
+.bd-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  color: var(--color-text-muted, #94A3B8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm, 8px);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.bd-back-btn:hover {
+  color: var(--color-text, #fff);
+  border-color: var(--color-primary, #8A2BE2);
+  background: rgba(138, 43, 226, 0.05);
+}
+
+/* Hero Section */
+.bd-hero {
+  position: relative;
+  border-radius: var(--radius-xl, 16px);
+  background: var(--color-surface, #18181B);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  padding: 2.5rem 2rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.bd-hero-glow {
+  position: absolute;
+  top: -100px;
+  right: -50px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.bd-tag-hinglish {
+  display: inline-block;
+  background: #EC4899;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.bd-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text, #F1F5F9);
+  margin-bottom: 0.25rem;
+}
+
+.bd-instructor {
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #94A3B8);
+}
+
+/* Video Player */
+.bd-player-section {
+  border-radius: var(--radius-xl, 16px);
+  background: #000;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.bd-player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+}
+
+.bd-player-header h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.bd-close-player {
+  background: transparent;
+  border: none;
+  color: #EF4444;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bd-video-frame-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.bd-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tabs Bar */
+.bd-tabs-bar {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.bd-tab-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted, #94A3B8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.bd-tab-btn.active {
+  color: #fff;
+}
+
+.bd-tab-pill-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(138, 43, 226, 0.15);
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  z-index: -1;
+}
+
+/* Lectures Grid */
+.bd-lectures-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bd-lecture-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface, #18181B);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  transition: border-color 0.25s ease;
+}
+
+.bd-lecture-card:hover {
+  border-color: rgba(138, 43, 226, 0.3);
+}
+
+.bd-lecture-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(138, 43, 226, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bd-lecture-info {
+  flex: 1;
+}
+
+.bd-lecture-info h5 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text, #F1F5F9);
+  margin-bottom: 0.25rem;
+}
+
+.bd-lecture-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--color-text-subtle, #64748B);
+}
+
+.bd-lecture-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bd-watch-btn {
+  background: var(--gradient-primary, linear-gradient(135deg, #8A2BE2, #00BFFF));
+  color: #fff;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bd-watch-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+}
+
+/* Resources Rows */
+.bd-resource-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface, #18181B);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  margin-bottom: 0.75rem;
+}
+
+.bd-resource-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bd-resource-info h6 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text, #F1F5F9);
+  margin-bottom: 0.15rem;
+}
+
+.bd-resource-info span {
+  font-size: 0.75rem;
+  color: var(--color-text-subtle, #64748B);
+}
+
+.bd-icon-purple { color: #A78BFA; }
+.bd-icon-blue { color: #60A5FA; }
+
+.bd-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  color: var(--color-text-muted, #94A3B8);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bd-download-btn:hover {
+  color: #fff;
+  border-color: var(--color-primary, #8A2BE2);
+  background: rgba(138, 43, 226, 0.05);
+}
+
+@media (max-width: 640px) {
+  .bd-lecture-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .bd-watch-btn {
+    width: 100%;
+  }
+  .bd-resource-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .bd-download-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
