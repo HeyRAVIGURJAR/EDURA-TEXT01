@@ -5,7 +5,7 @@ import {
   Users, ShieldBan, Database, Bell, Upload, FileText, MessageSquare,
   Search, Ban, CheckCircle, Send, LogOut, ChevronDown, Eye,
   Clock, Monitor, BarChart3, Radio, Plus, Smartphone, BookOpen, BadgeCheck,
-  Music, Play, Pause
+  Music, Play, Pause, ArrowLeft
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNotificationStore } from '../store/useNotificationStore';
@@ -269,8 +269,33 @@ const AdminDashboard = () => {
             <p className="ad-subtitle">EDURA System Administration</p>
           </div>
         </div>
-        <div className="ad-header-right">
-          <div className="ad-admin-badge">
+        <div className="ad-header-right" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button 
+            className="ad-dashboard-btn" 
+            onClick={() => navigate('/dashboard')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              color: '#cbd5e1',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              padding: '0.55rem 1rem',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              minHeight: '36px'
+            }}
+            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; e.currentTarget.style.color = '#fff'; }}
+            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; e.currentTarget.style.color = '#cbd5e1'; }}
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Dashboard</span>
+          </button>
+          <div className="ad-admin-badge" style={{ margin: 0 }}>
             <Radio size={12} className="ad-live-dot" />
             <span>ADMIN MODE</span>
           </div>

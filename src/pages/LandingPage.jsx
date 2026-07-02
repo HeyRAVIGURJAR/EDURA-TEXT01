@@ -41,11 +41,72 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  const followerRef = useRef(null);
 
   useEffect(() => {
+    const checkTouch = () => {
+      return (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+      );
+    };
+    const isTouch = checkTouch();
+    setIsTouchDevice(isTouch);
+
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Smooth Astronomical Star Follower
+    let animationFrameId;
+    let onMouseMove, onMouseLeave, onMouseEnter;
+
+    if (!isTouch) {
+      const follower = followerRef.current;
+      let posX = window.innerWidth / 2;
+      let posY = window.innerHeight / 2;
+      let mouseX = posX;
+      let mouseY = posY;
+
+      onMouseMove = (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      };
+
+      onMouseLeave = () => {
+        if (follower) follower.style.opacity = '0';
+      };
+
+      onMouseEnter = () => {
+        if (follower) follower.style.opacity = '1';
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseleave', onMouseLeave);
+      document.addEventListener('mouseenter', onMouseEnter);
+
+      const updatePosition = () => {
+        posX += (mouseX - posX) * 0.18; // Lerp easing factor (fast & smooth)
+        posY += (mouseY - posY) * 0.18;
+        if (follower) {
+          follower.style.transform = `translate3d(${posX - 12}px, ${posY - 12}px, 0)`;
+        }
+        animationFrameId = requestAnimationFrame(updatePosition);
+      };
+      updatePosition();
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (!isTouch) {
+        window.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseleave', onMouseLeave);
+        document.removeEventListener('mouseenter', onMouseEnter);
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, []);
 
   const handleConsoleRedirect = useCallback(() => {
@@ -144,13 +205,15 @@ const LandingPage = () => {
     { q: 'What is StudyBuddy AI?', a: 'StudyBuddy AI is your personal AI tutor that can explain any concept, solve doubts, and help you understand complex topics in simple language. Available 24/7 for Pro and Elite members.' },
   ];
 
-  // Motion reveal specs for scroll reveals
-  const revealProps = {
-    initial: { opacity: 0, y: 50, scale: 0.95 },
-    whileInView: { opacity: 1, y: 0, scale: 1 },
-    viewport: { once: true, amount: 0.3 },
-    transition: { duration: 0.6, ease: "easeOut" }
-  };
+  // Motion reveal specs for scroll reveals - optimized threshold and bypassed on mobile
+  const revealProps = isTouchDevice
+    ? { initial: { opacity: 1, y: 0, scale: 1 } }
+    : {
+        initial: { opacity: 0, y: 50, scale: 0.95 },
+        whileInView: { opacity: 1, y: 0, scale: 1 },
+        viewport: { once: true, amount: 0.15 },
+        transition: { duration: 0.6, ease: "easeOut" }
+      };
 
   const exactButtonClassName = "relative px-8 py-3 rounded-full font-bold text-white bg-[#0A0A0B] border border-white/10 shadow-[0_0_20px_rgba(138,43,226,0.3)] hover:shadow-[0_0_40px_rgba(138,43,226,0.8)] hover:-translate-y-1 hover:border-purple-500/50 transition-all duration-300 overflow-hidden group";
 
@@ -160,42 +223,59 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page relative overflow-hidden bg-gradient-to-br from-black via-[#0a0514] to-black">
-      {/* Interactive Particle Web Background */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={{
-          background: { color: { value: "transparent" } },
-          fpsLimit: 60,
-          interactivity: {
-            events: {
-              onHover: { enable: true, mode: "grab" },
-              resize: true,
+      {/* Astro Star Mouse Follower (Lag-free hardware accelerated) */}
+      {!isTouchDevice && (
+        <div ref={followerRef} className="astronomical-cursor-follower">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z" fill="url(#starGlowGrad)" />
+            <defs>
+              <linearGradient id="starGlowGrad" x1="0" y1="0" x2="24" y2="24">
+                <stop offset="0%" stopColor="#c084fc" />
+                <stop offset="100%" stopColor="#22d3ee" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      )}
+
+      {/* Interactive Particle Web Background - only on desktop for rendering speed */}
+      {!isTouchDevice && (
+        <Particles
+          id="tsparticles"
+          init={particlesInit}
+          options={{
+            background: { color: { value: "transparent" } },
+            fpsLimit: 120,
+            interactivity: {
+              events: {
+                onHover: { enable: true, mode: "grab" },
+                resize: true,
+              },
+              modes: {
+                grab: { distance: 200, links: { opacity: 0.8, color: "#a78bfa" } },
+              },
             },
-            modes: {
-              grab: { distance: 200, links: { opacity: 0.8, color: "#8b5cf6" } },
+            particles: {
+              color: { value: "#ffffff" },
+              links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.12, width: 1 },
+              move: {
+                direction: "none",
+                enable: true,
+                outModes: { default: "bounce" },
+                random: false,
+                speed: 0.5,
+                straight: false,
+              },
+              number: { density: { enable: true, area: 800 }, value: 45 },
+              opacity: { value: 0.25 },
+              shape: { type: "star" },
+              size: { value: { min: 1, max: 3 } },
             },
-          },
-          particles: {
-            color: { value: "#ffffff" },
-            links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.15, width: 1 },
-            move: {
-              direction: "none",
-              enable: true,
-              outModes: { default: "bounce" },
-              random: false,
-              speed: 0.4,
-              straight: false,
-            },
-            number: { density: { enable: true, area: 800 }, value: 40 },
-            opacity: { value: 0.3 },
-            shape: { type: "circle" },
-            size: { value: { min: 1, max: 2 } },
-          },
-          detectRetina: true,
-        }}
-        className="absolute inset-0 z-[-1]"
-      />
+            detectRetina: true,
+          }}
+          className="absolute inset-0 z-[-1]"
+        />
+      )}
 
       {/* ---- NAVBAR (TRANSLUCENT GLASS) ---- */}
       <motion.nav 
@@ -318,6 +398,45 @@ const LandingPage = () => {
             A gamified, AI-integrated learning platform designed to help you achieve your academic goals. 
             Track streaks, earn XP, compete in leagues, and get AI-powered doubt resolution — all in one premium experience.
           </motion.p>
+
+          {/* Live Learner Counter & Countdown Stats Row */}
+          <motion.div 
+            className="hero-stats-bar glass-panel"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            style={{
+              display: 'flex',
+              gap: '2.5rem',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.8rem 2rem',
+              borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(10, 10, 11, 0.4)',
+              margin: '0 auto 2.5rem auto',
+              maxWidth: '520px',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+                12,842+
+              </span>
+              <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Active Learners</span>
+            </div>
+            <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.08)' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#f59e0b' }}>198 Days</span>
+              <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>JEE Main 2027</span>
+            </div>
+            <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.08)' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#a78bfa' }}>91% Avg</span>
+              <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Target Accuracy</span>
+            </div>
+          </motion.div>
 
           <motion.div 
             className="hero-actions" 

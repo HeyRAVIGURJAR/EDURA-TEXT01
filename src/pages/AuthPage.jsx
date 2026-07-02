@@ -6,6 +6,7 @@ import {
   ArrowLeft, Loader2, ShieldAlert
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { useNotificationStore } from '../store/useNotificationStore';
 import { sanitizeInput } from '../utils/sanitize';
 import { loginSchema, signupSchema, getPasswordStrength } from '../utils/validate';
 import GlowButton from '../components/GlowButton';
@@ -71,6 +72,7 @@ const PasswordStrengthMeter = ({ password }) => {
 // --- Main Component ---
 const AuthPage = () => {
   const navigate = useNavigate();
+  const addNotification = useNotificationStore((s) => s.addNotification);
   const { login, signup, isAuthenticated, loginError, clearError } = useAuthStore();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -232,7 +234,10 @@ const AuthPage = () => {
 
   const handleGoogleLogin = () => {
     // Placeholder for Google OAuth integration
-    alert('Google OAuth integration coming soon! Use email/password for now.');
+    addNotification({
+      message: 'Google OAuth integration coming soon! Use email/password for now.',
+      type: 'warning',
+    });
   };
 
   const formVariants = {

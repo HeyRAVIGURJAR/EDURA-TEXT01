@@ -1,82 +1,75 @@
+import { batchCache } from '../utils/batch-cache';
+
 const API_BASE = 'https://brainboxinstitute.in/api';
 
-// Cache for all batches so we don't hit the API repeatedly for pagination mock
-let cachedAllBatches = null;
-let lastFetchTime = 0;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+// Helper to map batch attributes for backward compatibility with Edura components
+const mapBatchCompat = (batch) => {
+  if (!batch) return batch;
+  return {
+    ...batch,
+    _id: batch._id || batch.batch_id,
+    previewImage: batch.previewImage || batch.photo || "/images/hero-1.png",
+    feeTotal: 0
+  };
+};
 
 export const fetchBatches = async () => {
   try {
-    const response = await fetch(`${API_BASE}/batches`);
-    if (!response.ok) throw new Error('Failed to fetch batches');
-    const data = await response.json();
-    return data.batches || [];
+    const batches = await batchCache.getAllBatches();
+    return batches.map(mapBatchCompat);
   } catch (error) {
     console.error('Error fetching batches:', error);
-    const cached = localStorage.getItem('edura_cached_batches');
-    return cached ? JSON.parse(cached) : [];
+    return [];
   }
 };
 
 /**
- * Mocks server-side pagination, search, and implements AbortController
+ * Uses batchCache with built-in Levenshtein and Phonetic fuzzy search, paginating local/remote data.
  */
 export const fetchBatchesPaginated = async (page = 1, limit = 15, query = '', signal) => {
-  // 1. Fetch or get from cache
-  const now = Date.now();
-  if (!cachedAllBatches || now - lastFetchTime > CACHE_TTL) {
-    try {
-      const response = await fetch(`${API_BASE}/batches`, { signal });
-      if (!response.ok) throw new Error('Failed to fetch batches');
-      const data = await response.json();
-      cachedAllBatches = data.batches || [];
-      lastFetchTime = now;
-      localStorage.setItem('edura_cached_batches', JSON.stringify(cachedAllBatches));
-    } catch (error) {
-      if (error.name === 'AbortError') {
-        throw error; // Let the caller handle cancellation
-      }
-      console.error('Error fetching paginated batches:', error);
-      const cached = localStorage.getItem('edura_cached_batches');
-      cachedAllBatches = cached ? JSON.parse(cached) : [];
+  try {
+    let filteredData = [];
+    if (query) {
+      // Query the batch cache using its high-fidelity fuzzy search
+      const searchResults = await batchCache.search(query, 999999);
+      filteredData = searchResults.map(mapBatchCompat);
+    } else {
+      const allBatches = await batchCache.getAllBatches();
+      filteredData = allBatches.map(mapBatchCompat);
     }
+
+    // Paginate
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedData = filteredData.slice(startIndex, endIndex);
+
+    return {
+      data: paginatedData,
+      hasMore: endIndex < filteredData.length,
+      nextPage: endIndex < filteredData.length ? page + 1 : null,
+      total: filteredData.length
+    };
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+    console.error('Error fetching paginated batches:', error);
+    return {
+      data: [],
+      hasMore: false,
+      nextPage: null,
+      total: 0
+    };
   }
-
-  // To simulate network delay (for testing smooth skeletons)
-  // await new Promise(resolve => setTimeout(resolve, 800));
-
-  // 2. Filter by search query
-  let filteredData = cachedAllBatches;
-  if (query) {
-    const lowerQuery = query.toLowerCase();
-    filteredData = cachedAllBatches.filter(batch => 
-      batch.name?.toLowerCase().includes(lowerQuery) || 
-      batch.byName?.toLowerCase().includes(lowerQuery)
-    );
-  }
-
-  // 3. Paginate
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const paginatedData = filteredData.slice(startIndex, endIndex);
-
-  return {
-    data: paginatedData,
-    hasMore: endIndex < filteredData.length,
-    nextPage: endIndex < filteredData.length ? page + 1 : null,
-    total: filteredData.length
-  };
 };
 
 export const fetchBatchDetails = async (batchId, signal) => {
   try {
-    const response = await fetch(`${API_BASE}/batch-details?batchId=${batchId}`, { signal });
-    if (!response.ok) throw new Error('Failed to fetch batch details');
-    return await response.json();
+    const batches = await batchCache.getAllBatches();
+    const batch = batches.find(b => b._id === batchId || b.batch_id === batchId);
+    return mapBatchCompat(batch) || null;
   } catch (error) {
-    if (error.name !== 'AbortError') {
-      console.error('Error fetching batch details:', error);
-    }
+    console.error('Error fetching batch details:', error);
     return null;
   }
 };
@@ -107,18 +100,6 @@ export const askStudyBuddy = async (query) => {
     } catch (error) {
       console.error('Gemini API error, falling back to mock response:', error);
     }
-  }
-
-  // Simulated AI response fallback
-  await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate delay
-  
-  const lowerQuery = query.toLowerCase();
-  if (lowerQuery.includes('newton')) {
-    return "### Newton's Laws of Motion Explained:\n\n1. **First Law (Inertia)**: An object remains at rest or in uniform motion unless acted upon by an external force.\n2. **Second Law (F=ma)**: The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass.\n3. **Third Law (Action & Reaction)**: For every action, there is an equal and opposite reaction.\n\n*StudyBuddy Tip: Think of a rocket launch—fuel pushes down (action), rocket moves up (reaction)!*";
-  } else if (lowerQuery.includes('chemical') || lowerQuery.includes('equation')) {
-    return "### Balancing Chemical Equations:\n\nTo balance equations, you must satisfy the **Law of Conservation of Mass** (same number of atoms on both sides).\n\nExample:\n$$\\text{H}_2 + \\text{O}_2 \\rightarrow \\text{H}_2\\text{O}$$\nBalanced:\n$$2\\text{H}_2 + \\text{O}_2 \\rightarrow 2\\text{H}_2\\text{O}$$\n\n*StudyBuddy Tip: Always balance polyatomic ions as single units if they appear on both sides.*";
-  } else if (lowerQuery.includes('organic') || lowerQuery.includes('chemistry')) {
-    return "### Organic Chemistry Basics:\n\nOrganic chemistry centers around **Carbon (C)** atoms. Carbon is tetravalent (can form 4 covalent bonds).\n\nKey Concepts:\n- **Hydrocarbons**: Alkanes (single bonds), Alkenes (double bonds), Alkynes (triple bonds).\n- **Functional Groups**: Alcohols (-OH), Carboxylic Acids (-COOH), Aldehydes (-CHO).\n\n*StudyBuddy Tip: Visualizing shapes (hybridization like sp³, sp², sp) is key to mastering reactions!*";
   }
 
   return `Here is a detailed explanation of "${query}". [Simulated Response] In a live environment with VITE_GEMINI_API_KEY, this response is generated by the Google Gemini model to assist you. Keep up the great studying!`;
@@ -162,4 +143,34 @@ export const submitSupportMessage = async (message, adminUsername) => {
   console.log(`[API MOCK] Support Ticket for ${adminUsername}: "${message}"`);
   await new Promise(resolve => setTimeout(resolve, 800));
   return { success: true, mock: true };
+};
+
+/**
+ * Fetch Official DPP Quiz Questions dynamically
+ */
+export const fetchDppQuiz = async () => {
+  const url = `https://brainboxinstitute.in/api/dpp-quiz?batchId=698ad3519549b300a5e1cc6a&scheduleId=6a2a696bf4c2a248d05f796b&testId=6a1eccafbba856d03b9a5a08&tag=Start&isFreeTest=false`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch DPP Quiz from server');
+    return await res.json();
+  } catch (err) {
+    console.error('Error fetching DPP quiz:', err);
+    return null;
+  }
+};
+
+/**
+ * Fetch Quiz Solution Videos securely
+ */
+export const fetchDppSolutionVideo = async () => {
+  const url = `https://brainboxinstitute.in/api/test-solution-video?parentId=698ad3519549b300a5e1cc6a&childId=6a310f89446d03abc3c9a7ff&videoId=68603956298ec880cc405ea9&videoUrl=https%3A%2F%2Fd1d34p8vz63oiq.cloudfront.net%2F49bea851-026e-4737-9af0-f8930a2f9ee5%2Fmaster.mpd&url_type=penpencilvdo`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch DPP Solution Video from server');
+    return await res.json();
+  } catch (err) {
+    console.error('Error fetching DPP Solution video:', err);
+    return null;
+  }
 };

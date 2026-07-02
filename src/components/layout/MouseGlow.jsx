@@ -1,39 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring } from 'framer-motion';
+import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const MouseGlow = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: e.clientX,
-        y: e.clientY
-      });
-      
-      // Check if hovering over clickable elements
-      const target = e.target;
-      const isClickable = 
-        target.tagName.toLowerCase() === 'a' || 
-        target.tagName.toLowerCase() === 'button' || 
-        target.closest('a') || 
-        target.closest('button') || 
-        window.getComputedStyle(target).cursor === 'pointer';
-        
-      setIsHovering(isClickable);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
   // Smooth spring physics for the trail effect
   const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
-  const cursorX = useSpring(mousePosition.x, springConfig);
-  const cursorY = useSpring(mousePosition.y, springConfig);
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+
+  useEffect(() => {
+    // Detect touch screens
+    const checkTouch = () => {
+      return (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+      );
+    };
+    
+    if (checkTouch()) {
+      setIsTouchDevice(true);
+      return;
+    }
+
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      
+      // Fast clickable check without window.getComputedStyle (which causes layout thrashing)
+      const target = e.target;
+      if (!target) return;
+
+      const isClickable = !!target.closest('a, button, [role="button"], input[type="submit"], input[type="button"], summary, select');
+        
+      // Only update state if hover status has changed to prevent infinite re-renders
+      setIsHovering((prev) => {
+        if (prev !== isClickable) return isClickable;
+        return prev;
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [mouseX, mouseY]);
+
+  if (isTouchDevice) return null;
 
   return (
     <motion.div

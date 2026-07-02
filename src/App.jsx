@@ -40,6 +40,13 @@ const AppsPage = lazy(() => import('./pages/AppsPage'));
 const TermsOfMaster = lazy(() => import('./pages/TermsOfMaster'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ChallengeArena = lazy(() => import('./pages/ChallengeArena'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const OttPage = lazy(() => import('./pages/OttPage'));
+const LiveClassesPage = lazy(() => import('./pages/LiveClassesPage'));
+const PracticeHubPage = lazy(() => import('./pages/PracticeHubPage'));
+const RevisionPage = lazy(() => import('./pages/RevisionPage'));
+const AiPlannerPage = lazy(() => import('./pages/AiPlannerPage'));
 
 // Store
 import { useAuthStore } from './store/useAuthStore';
@@ -130,35 +137,6 @@ const DashboardLayout = () => {
           </AnimatePresence>
         </div>
       </main>
-
-      {/* Global Feedback Floating Button */}
-      <button 
-        onClick={() => setFeedbackOpen(true)}
-        className="floating-feedback-btn"
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          background: 'var(--gradient-primary)',
-          color: 'white',
-          border: 'none',
-          boxShadow: 'var(--shadow-lg)',
-          fontSize: '1.5rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 900,
-          transition: 'transform var(--transition-fast)'
-        }}
-        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        💡
-      </button>
 
       <FeedbackPortal isOpen={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
 
@@ -281,24 +259,22 @@ function App() {
               <Route index element={<GamifiedDashboard />} />
               <Route path="apps" element={<AppsPage />} />
               <Route path="arena" element={<ChallengeArena />} />
-              <Route path="leaderboard" element={
-                <div style={{ padding: '2rem', textAlign: 'center' }}>
-                  <h2>Aspirants Leaderboard</h2>
-                  <p style={{ color: 'var(--color-text-muted)', marginTop: '1rem' }}>Compete with other scholars live.</p>
-                </div>
-              } />
+              <Route path="leaderboard" element={<LeaderboardPage />} />
               <Route path="batches" element={<Dashboard />} />
-              <Route path="favorites" element={<Dashboard showFavoritesOnly={true} />} />
+              <Route path="favorites" element={<RevisionPage />} />
+              <Route path="bookmarks" element={<RevisionPage />} />
+              <Route path="downloads" element={<RevisionPage />} />
               <Route path="batch/:batchId" element={<BatchDetail />} />
               <Route path="library" element={<LibraryPage />} />
               <Route path="profile" element={<ProfilePage />} />
-              <Route path="ott" element={
-                <div style={{ padding: '2rem', textAlign: 'center' }}>
-                  <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎬</div>
-                  <h2>EDURA OTT Platform</h2>
-                  <p style={{ color: 'var(--color-text-muted)', marginTop: '1rem' }}>Premium video lectures coming soon.</p>
-                </div>
-              } />
+              <Route path="ott" element={<OttPage />} />
+              <Route path="live" element={<LiveClassesPage />} />
+              <Route path="dpp" element={<PracticeHubPage />} />
+              <Route path="tests" element={<PracticeHubPage />} />
+              <Route path="pyqs" element={<PracticeHubPage />} />
+              <Route path="assignments" element={<PracticeHubPage />} />
+              <Route path="ai-quiz" element={<AiPlannerPage />} />
+              <Route path="ai-planner" element={<AiPlannerPage />} />
               <Route path="ai-buddy" element={
                 <div style={{ padding: '1rem' }}>
                   <StudyBuddyAI />
@@ -307,6 +283,7 @@ function App() {
               <Route path="community" element={<CommunityFeed />} />
               <Route path="support" element={<SupportPage />} />
               <Route path="feedback" element={<FeedbackPage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
               <Route path="*" element={
                 <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
                   <h2>Page Under Construction 🚧</h2>

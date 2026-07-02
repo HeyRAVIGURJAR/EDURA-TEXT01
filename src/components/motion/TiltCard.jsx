@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 
 /**
@@ -8,6 +8,7 @@ import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
  */
 const TiltCard = ({ children, className = '', tiltAmount = 10, glare = true, style = {}, ...props }) => {
   const ref = useRef(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const x = useMotionValue(0);
@@ -19,6 +20,17 @@ const TiltCard = ({ children, className = '', tiltAmount = 10, glare = true, sty
   // Glare position
   const glareX = useTransform(x, [-0.5, 0.5], [0, 100]);
   const glareY = useTransform(y, [-0.5, 0.5], [0, 100]);
+
+  useEffect(() => {
+    const checkTouch = () => {
+      return (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+      );
+    };
+    setIsTouchDevice(checkTouch());
+  }, []);
 
   const handleMouseMove = (e) => {
     if (!ref.current) return;
@@ -34,6 +46,15 @@ const TiltCard = ({ children, className = '', tiltAmount = 10, glare = true, sty
     y.set(0);
     setIsHovered(false);
   };
+
+  // If touch device, return static container to avoid heavy rotation math on scroll
+  if (isTouchDevice) {
+    return (
+      <div className={className} style={style} {...props}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div

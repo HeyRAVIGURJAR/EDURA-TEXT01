@@ -3,7 +3,8 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Library, FileText, Clapperboard, MessageSquare, 
   Trophy, Bot, Lightbulb, LifeBuoy, Bell, ChevronLeft, ChevronRight,
-  Star, BookOpen, ShieldBan, Send, Book, Settings, User, Smartphone, Gift, Clock, Heart, Music
+  Star, BookOpen, ShieldBan, Send, Book, Settings, User, Smartphone, Gift, Clock, Heart, Music, LogOut,
+  Radio, Download, Bookmark, ClipboardList, HelpCircle, PenTool
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import MusicPlayer from './MusicPlayer';
@@ -15,7 +16,15 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
   const navigate = useNavigate();
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const userObj = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const [isReferModalOpen, setIsReferModalOpen] = useState(false);
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout();
+      navigate('/');
+    }
+  };
   
   const profilePic = localStorage.getItem(`edura_profile_pic_${userObj?.id}`) || '';
 
@@ -37,23 +46,17 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
       <div className={`sidebar-overlay ${mobileOpen ? 'visible' : ''}`} onClick={onMobileClose} />
       <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
         
-        {/* Transparent Shadow Box for Logo & Time (Vertical Group) */}
+        {/* Sleek, frameless Logo Header */}
         <div className="sidebar-brand-box" style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '0.75rem',
-          margin: '12px 12px 20px 12px',
-          padding: '16px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '16px',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(12px)',
-          position: 'relative',
-          overflow: 'hidden'
+          margin: '8px 16px 24px 16px',
+          padding: '0',
+          position: 'relative'
         }}>
           {/* Logo Section */}
-          <div className="sidebar-header" style={{ padding: 0, margin: 0, background: 'none', border: 'none' }}>
+          <div className="sidebar-header" style={{ padding: '0 0 12px 0', margin: 0, background: 'none', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="sidebar-logo" style={{ width: collapsed ? 'auto' : '100%', justifyContent: collapsed ? 'center' : 'flex-start' }}>
               {collapsed ? (
                 <div className="sidebar-logo-icon">E</div>
@@ -67,7 +70,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
                     cursor: 'pointer', 
                     filter: 'invert(1)', 
                     objectFit: 'contain',
-                    height: '32px',
+                    height: '28px',
                     width: 'auto'
                   }} 
                   onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'} 
@@ -75,8 +78,8 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
                 />
               )}
             </div>
-            <button className="sidebar-toggle" onClick={onToggle} aria-label="Toggle sidebar" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-              {collapsed ? <ChevronRight size={18} color="#06B6D4" /> : <ChevronLeft size={18} color="#06B6D4" />}
+            <button className="sidebar-toggle" onClick={onToggle} aria-label="Toggle sidebar" style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}>
+              {collapsed ? <ChevronRight size={14} color="#06b6d4" /> : <ChevronLeft size={14} color="#06b6d4" />}
             </button>
           </div>
 
@@ -85,15 +88,14 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
             <div className="sidebar-time-element" style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '0.5rem',
-              background: 'rgba(139, 92, 246, 0.1)',
-              borderRadius: '8px',
-              border: '1px solid rgba(139, 92, 246, 0.2)'
+              gap: '0.4rem',
+              padding: '2px 0',
+              color: '#8b5cf6',
+              fontSize: '0.78rem',
+              fontWeight: 700
             }}>
-              <Clock size={16} color="#8B5CF6" className="animate-pulse" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2e8f0', letterSpacing: '0.05em' }}>
+              <Clock size={13} className="animate-pulse" />
+              <span style={{ color: '#94a3b8', letterSpacing: '0.04em' }}>
                 {formatTime(time)}
               </span>
             </div>
@@ -109,8 +111,8 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           </div>
         </div>
 
-        {/* Main Nav */}
-        <div className="sidebar-section-title">Main</div>
+        {/* LEARN SECTION */}
+        <div className="sidebar-section-title">Learn</div>
         <NavLink to="/dashboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose} end>
           <span className="sidebar-icon"><LayoutDashboard size={20} /></span>
           <span className="sidebar-label">Dashboard</span>
@@ -119,36 +121,82 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <span className="sidebar-icon"><Library size={20} /></span>
           <span className="sidebar-label">My Batches</span>
         </NavLink>
-        <NavLink to="/dashboard/tests" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
-          <span className="sidebar-icon"><FileText size={20} /></span>
-          <span className="sidebar-label">Test Series</span>
+        <NavLink to="/dashboard/live" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Radio size={20} /></span>
+          <span className="sidebar-label">Live Classes</span>
         </NavLink>
-        <NavLink to="/dashboard/favorites" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
-          <span className="sidebar-icon"><Heart size={20} /></span>
-          <span className="sidebar-label">Favorites</span>
-        </NavLink>
-
-        {/* EDURA OTT */}
-        <div className="sidebar-section-title">Entertainment</div>
         <NavLink to="/dashboard/ott" className={({ isActive }) => `sidebar-link ott-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Clapperboard size={20} /></span>
           <span className="sidebar-label">EDURA OTT</span>
           <span className="ott-badge">NEW</span>
         </NavLink>
 
-        {/* Community */}
+        {/* PRACTICE SECTION */}
+        <div className="sidebar-section-title">Practice</div>
+        <NavLink to="/dashboard/dpp" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><HelpCircle size={20} /></span>
+          <span className="sidebar-label">DPP / Practice</span>
+        </NavLink>
+        <NavLink to="/dashboard/tests" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><FileText size={20} /></span>
+          <span className="sidebar-label">Test Series</span>
+        </NavLink>
+        <NavLink to="/dashboard/pyqs" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><ClipboardList size={20} /></span>
+          <span className="sidebar-label">PYQs</span>
+        </NavLink>
+        <NavLink to="/dashboard/assignments" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><PenTool size={20} /></span>
+          <span className="sidebar-label">Assignments</span>
+        </NavLink>
+
+        {/* REVISION SECTION */}
+        <div className="sidebar-section-title">Revision</div>
+        <NavLink to="/dashboard/favorites" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Heart size={20} /></span>
+          <span className="sidebar-label">Favorites</span>
+        </NavLink>
+        <NavLink to="/dashboard/bookmarks" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Bookmark size={20} /></span>
+          <span className="sidebar-label">Bookmarks</span>
+        </NavLink>
+        <NavLink to="/dashboard/downloads" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Download size={20} /></span>
+          <span className="sidebar-label">Downloads</span>
+        </NavLink>
+
+        {/* AI TOOLS SECTION */}
+        <div className="sidebar-section-title">AI Tools</div>
+        <NavLink to="/dashboard/ai-buddy" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Bot size={20} /></span>
+          <span className="sidebar-label">StudyBuddy AI</span>
+        </NavLink>
+        <NavLink to="/dashboard/ai-quiz" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Lightbulb size={20} /></span>
+          <span className="sidebar-label">AI Quiz</span>
+        </NavLink>
+        <NavLink to="/dashboard/ai-planner" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Clock size={20} /></span>
+          <span className="sidebar-label">AI Planner</span>
+        </NavLink>
+
+        {/* COMMUNITY SECTION */}
         <div className="sidebar-section-title">Community</div>
         <NavLink to="/dashboard/community" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><MessageSquare size={20} /></span>
-          <span className="sidebar-label">Community</span>
+          <span className="sidebar-label">Community Feed</span>
         </NavLink>
         <NavLink to="/dashboard/leaderboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Trophy size={20} /></span>
           <span className="sidebar-label">Leaderboard</span>
         </NavLink>
+        <NavLink to="/dashboard/arena" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Star size={20} /></span>
+          <span className="sidebar-label">Challenges</span>
+        </NavLink>
 
-        {/* Tools */}
-        <div className="sidebar-section-title">Tools</div>
+        {/* EXTRAS SECTION */}
+        <div className="sidebar-section-title">Extras</div>
         <button 
           onClick={() => { setIsReferModalOpen(true); if (onMobileClose) onMobileClose(); }} 
           className="sidebar-link w-full text-left bg-transparent border-none font-inherit cursor-pointer relative overflow-hidden group"
@@ -157,20 +205,6 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <span className="sidebar-icon"><Gift size={20} className="text-purple-400 group-hover:animate-bounce" /></span>
           <span className="sidebar-label font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Refer & Earn</span>
         </button>
-        <NavLink to="/dashboard/ai-buddy" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
-          <span className="sidebar-icon"><Bot size={20} /></span>
-          <span className="sidebar-label">StudyBuddy AI</span>
-        </NavLink>
-        <NavLink to="/dashboard/feedback" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
-          <span className="sidebar-icon"><Send size={20} /></span>
-          <span className="sidebar-label">Feedback</span>
-        </NavLink>
-        <NavLink to="/dashboard/support" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
-          <span className="sidebar-icon"><LifeBuoy size={20} /></span>
-          <span className="sidebar-label">Support</span>
-        </NavLink>
-
-        {/* Books & Library and Profile settings */}
         <NavLink to="/dashboard/library" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Book size={20} /></span>
           <span className="sidebar-label">Library & Books</span>
@@ -179,11 +213,18 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <span className="sidebar-icon"><User size={20} /></span>
           <span className="sidebar-label">Profile Settings</span>
         </NavLink>
+        <NavLink to="/dashboard/feedback" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><Send size={20} /></span>
+          <span className="sidebar-label">Feedback</span>
+        </NavLink>
+        <NavLink to="/dashboard/support" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
+          <span className="sidebar-icon"><LifeBuoy size={20} /></span>
+          <span className="sidebar-label">Help & Support</span>
+        </NavLink>
         <NavLink to="/dashboard/apps" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Smartphone size={20} /></span>
           <span className="sidebar-label">Get App</span>
         </NavLink>
-
         <button 
           onClick={(e) => {
             e.preventDefault();
@@ -195,8 +236,6 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <span className="sidebar-icon"><Music size={20} /></span>
           <span className="sidebar-label">Music Player</span>
         </button>
-
-        {/* Notifications */}
         <NavLink to="/dashboard/notifications" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Bell size={20} /></span>
           <span className="sidebar-label">Notifications</span>
@@ -217,25 +256,37 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
         {/* Global Mini Player has been removed to prevent overlap, GlobalAudioPlayer handles music now */}
 
         {/* User Profile Footer */}
-        <div 
-          className="sidebar-user" 
-          onClick={() => navigate('/dashboard/profile')} 
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="sidebar-user-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0.25rem 0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {profilePic ? (
-                <img src={profilePic} alt="Avatar" className="sidebar-user-avatar-img" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
-              ) : (
-                <div className="sidebar-user-avatar">{userObj?.username?.charAt(0).toUpperCase() || 'S'}</div>
-              )}
-              <div className="sidebar-user-info" style={{ display: collapsed ? 'none' : 'block' }}>
-                <div className="user-name" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{userObj?.username || 'Student'}</div>
-                <div className="user-role" style={{ fontSize: '0.7rem', color: 'var(--color-text-subtle)' }}>Settings</div>
+        <div className="sidebar-user-footer">
+          <div 
+            className="sidebar-user" 
+            onClick={() => navigate('/dashboard/profile')} 
+            style={{ cursor: 'pointer', flex: 1 }}
+          >
+            <div className="sidebar-user-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '0.25rem 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {profilePic ? (
+                  <img src={profilePic} alt="Avatar" className="sidebar-user-avatar-img" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+                ) : (
+                  <div className="sidebar-user-avatar">{userObj?.username?.charAt(0).toUpperCase() || 'S'}</div>
+                )}
+                <div className="sidebar-user-info" style={{ display: collapsed ? 'none' : 'block' }}>
+                  <div className="user-name" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{userObj?.username || 'Student'}</div>
+                  <div className="user-role" style={{ fontSize: '0.7rem', color: 'var(--color-text-subtle)' }}>Profile & Settings</div>
+                </div>
               </div>
+              {!collapsed && <Settings size={15} style={{ color: 'var(--color-text-muted)', flexShrink: 0 }} />}
             </div>
-            {!collapsed && <Settings size={16} style={{ color: 'var(--color-text-muted)', flexShrink: 0 }} />}
           </div>
+          {/* Logout Button */}
+          <button
+            className="sidebar-logout-btn"
+            onClick={handleLogout}
+            title="Logout"
+            aria-label="Logout"
+          >
+            <LogOut size={17} />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </div>
       </aside>
 

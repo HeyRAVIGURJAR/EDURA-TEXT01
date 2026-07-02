@@ -20,6 +20,21 @@
   overflow-x: hidden;
 }
 
+/* Premium Thin Scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
 .sidebar-brand-box {
   flex-shrink: 0;
 }
@@ -247,11 +262,19 @@
   box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
 }
 
-/* User */
-.sidebar-user {
+/* User Footer */
+.sidebar-user-footer {
   margin-top: auto;
   padding-top: 1rem;
   border-top: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.sidebar-user {
+  flex: 1;
+  overflow: hidden;
 }
 
 .sidebar-user-card {
@@ -292,6 +315,34 @@
   font-size: 0.7rem;
   color: var(--color-text-muted);
 }
+
+/* Logout Button */
+.sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  color: #f87171;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 40px;
+}
+
+.sidebar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  transform: translateY(-1px);
+}
+
 
 /* ========================================
    MOBILE SIDEBAR OVERLAY

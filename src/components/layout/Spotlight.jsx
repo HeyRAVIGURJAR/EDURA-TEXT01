@@ -1,18 +1,35 @@
 import React, { useEffect, useState } from 'react';
 
 const Spotlight = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [position, setPosition] = useState({ x: -1000, y: -1000 });
 
   useEffect(() => {
+    // Detect touch screens
+    const checkTouch = () => {
+      return (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0
+      );
+    };
+    
+    if (checkTouch()) {
+      setIsTouchDevice(true);
+      return;
+    }
+
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  if (isTouchDevice) return null;
 
   return (
     <div 

@@ -1,0 +1,428 @@
+/* ========================================
+   NOTIFICATIONS PAGE — PUSH CENTER CSS
+   ======================================== */
+
+.notif-page-container {
+  padding: 1rem 1rem 120px 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Back Row */
+.notif-back-row {
+  display: flex;
+}
+
+.notif-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 38px;
+}
+
+.notif-back-btn:hover {
+  color: #fff;
+  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* Header */
+.notif-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.notif-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.notif-subtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+}
+
+.notif-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notif-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* Split Layout */
+.notif-split-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 860px) {
+  .notif-split-layout {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+/* Card components */
+.notif-card {
+  border-radius: 18px;
+  padding: 1.4rem;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.card-desc {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Subscriptions button toggle */
+.push-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 42px;
+}
+
+.push-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.push-toggle-btn.enabled {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+/* Preferences List checkboxes */
+.preferences-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.9rem;
+}
+
+.pref-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.pref-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  accent-color: #8b5cf6;
+  cursor: pointer;
+}
+
+.pref-label-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pref-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.pref-sub {
+  font-size: 0.7rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+/* Push Simulator button controls */
+.simulation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sim-btn {
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  color: #22d3ee;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.sim-btn:hover {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.25);
+  color: #fff;
+}
+
+/* Admin Broadcast Form */
+.admin-broadcast-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.admin-broadcast-form textarea {
+  width: 100%;
+  min-height: 90px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  padding: 0.8rem;
+  resize: vertical;
+  outline: none;
+}
+
+.admin-broadcast-form textarea:focus {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.form-controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.form-controls select {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  outline: none;
+  min-height: 38px;
+}
+
+.broadcast-submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  border: none;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.broadcast-submit-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Icon class colors */
+.icon-purple { color: #8b5cf6; }
+.icon-cyan { color: #06b6d4; }
+.icon-danger { color: #ef4444; }
+
+/* Right Side list styling */
+.list-card {
+  height: 100%;
+  min-height: 480px;
+}
+
+.notif-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.notif-list-wrap::-webkit-scrollbar {
+  width: 4px;
+}
+.notif-list-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.notif-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.notif-item-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.notif-item-row.broadcast::before { background: linear-gradient(180deg, #8a2be2, #00bfff); }
+.notif-item-row.info::before { background: #00bfff; }
+.notif-item-row.warning::before { background: #f59e0b; }
+.notif-item-row.success::before { background: #10b981; }
+.notif-item-row.error::before { background: #ef4444; }
+
+.notif-icon-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.broadcast .notif-icon-wrap { background: rgba(138, 43, 226, 0.12); color: #8a2be2; }
+.info .notif-icon-wrap { background: rgba(0, 191, 255, 0.12); color: #00bfff; }
+.warning .notif-icon-wrap { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.success .notif-icon-wrap { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+.error .notif-icon-wrap { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+.notif-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.notif-item-content p {
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.notif-time {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.notif-dismiss {
+  background: transparent;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.notif-dismiss:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+/* Empty notifications styling */
+.empty-notifications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: #475569;
+  gap: 0.6rem;
+}
+
+.empty-notifications p {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.empty-notifications span {
+  font-size: 0.72rem;
+  color: #64748b;
+  max-width: 250px;
+}

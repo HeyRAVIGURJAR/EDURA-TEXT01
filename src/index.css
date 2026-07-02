@@ -82,7 +82,11 @@ html {
     isolation: isolate;
     border-radius: inherit;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+    /* Removed permanent glow — only on hover */
+  }
+
+  .stitch-border:hover {
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
   }
 
   .stitch-border::before {
@@ -108,12 +112,12 @@ html {
     z-index: -1;
   }
 
-  /* Ghost Glow Card Styles */
+  /* Ghost Glow Card — subtle hover, not neon explosion */
   .ghost-glow-card {
     isolation: isolate;
   }
   .ghost-glow-card:hover {
-    box-shadow: 0 0 40px -10px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 24px -4px rgba(139, 85, 247, 0.2);
   }
 
   .ghost-glow-aurora {
@@ -122,7 +126,7 @@ html {
     left: 50%;
     width: 250%;
     height: 250%;
-    background: conic-gradient(from 0deg, transparent 0%, #8b5cf6 25%, #06b6d4 50%, #ec4899 75%, transparent 100%);
+    background-image: conic-gradient(from 0deg, transparent 0%, #8b5cf6 25%, #06b6d4 50%, #ec4899 75%, transparent 100%);
     filter: blur(20px);
     opacity: 0.3;
     animation: border-spin 6s linear infinite;
@@ -131,11 +135,36 @@ html {
     transform: translate(-50%, -50%);
   }
 
+  /* Optimize for mobile and touch devices to reduce lag */
+  @media (pointer: coarse) {
+    .stitch-border::before {
+      animation: none !important;
+      background: linear-gradient(135deg, rgba(139,92,246,0.4) 0%, rgba(6,182,212,0.4) 100%) !important;
+      width: 100% !important;
+      height: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      transform: none !important;
+    }
+    .ghost-glow-aurora {
+      display: none !important;
+    }
+    .ghost-glow-card:hover {
+      box-shadow: none !important;
+    }
+    /* Disable ALL sweep flash animations on mobile for perf */
+    button::after,
+    .animate-button-shine {
+      animation: none !important;
+      display: none !important;
+    }
+  }
+
   .ghost-glow-mouse {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: radial-gradient(
+    background-image: radial-gradient(
       circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
       rgba(168, 85, 247, 0.5),
       transparent 60%

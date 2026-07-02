@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { BookOpen, Calendar, Heart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BookOpen, Calendar, Heart, Users, Zap, Lock } from 'lucide-react';
 import ImageOptimizer from '../ui/ImageOptimizer';
 import GhostGlowCard from '../ui/GhostGlowCard';
 import './BadgeCard.css';
@@ -13,26 +13,30 @@ const BadgeCard = ({
 }) => {
   const navigate = useNavigate();
 
+  // Force all batches to be free
+  const price = 0;
+  const isFree = true;
+  const priceDisplay = '₹ FREE';
+
+  // Derive subjects/content count
+  const subjectCount = badge.subjects?.length || badge.subjectCount || null;
+
   // Handle study navigation
   const handleStudyClick = () => {
     navigate(`/dashboard/batch/${badge.id}`);
   };
 
-  // Mock target details if not provided
   const targetDesc = badge.description || "Targeted Batch for JEE/NEET & CBSE Boards Aspirants";
-  const startEndDates = "Starts on 10 Jul 2026 | Ends on 15 Mar 2027";
 
   return (
     <GhostGlowCard 
       className="stitch-border pw-batch-card glass-panel h-full"
       style={{ '--stitch-bg': '#0f172a' }}
       whileHover={{ 
-        scale: 1.02, 
-        rotateX: 2, 
-        rotateY: 2, 
-        boxShadow: "0px 10px 30px rgba(138, 43, 226, 0.4)" 
+        scale: 1.015, 
+        boxShadow: "0px 12px 32px rgba(138, 43, 226, 0.35)" 
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
     >
       {/* Thumbnail Area */}
       <div className="pw-image-wrap">
@@ -45,46 +49,81 @@ const BadgeCard = ({
         <span className="pw-language-tag">Hinglish</span>
 
         {/* Like Button (Top Right) */}
-        <button 
+        <motion.button 
           className={`pw-like-btn ${isLiked ? 'liked' : ''}`}
-          style={{ zIndex: 10 }}
           onClick={(e) => {
             e.stopPropagation();
             if (onLike) onLike(badge.id);
           }}
-          aria-label="Add to favorites"
+          aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
+          whileTap={{ scale: 0.85 }}
+          style={{ zIndex: 99 }}
         >
-          <Heart size={16} fill={isLiked ? "var(--color-primary)" : "none"} />
-        </button>
+          <AnimatePresence mode="wait">
+            {isLiked ? (
+              <motion.span
+                key="liked"
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                exit={{ scale: 0 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+                className="like-icon-inner"
+              >
+                <Heart size={16} fill="#ef4444" color="#ef4444" />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="unliked"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                transition={{ duration: 0.15 }}
+                className="like-icon-inner"
+              >
+                <Heart size={16} fill="none" color="#94a3b8" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
 
       {/* Card Info Content */}
       <div className="pw-info-wrap">
         <div className="pw-title-row">
           <h3 className="pw-title">{badge.name}</h3>
-          <span className="pw-badge-new">New</span>
+          {badge.name?.includes('2027') && <span className="pw-badge-new">New</span>}
         </div>
 
-        {/* Gray Info Rows */}
+        {/* Detail Rows */}
         <div className="pw-details-list">
           <div className="pw-detail-row">
-            <BookOpen size={14} className="pw-detail-icon" />
+            <BookOpen size={13} className="pw-detail-icon" />
             <span className="pw-detail-text">{targetDesc}</span>
           </div>
+          {subjectCount && (
+            <div className="pw-detail-row">
+              <Zap size={13} className="pw-detail-icon" />
+              <span className="pw-detail-text">{subjectCount} Subjects Covered</span>
+            </div>
+          )}
           <div className="pw-detail-row">
-            <Calendar size={14} className="pw-detail-icon" />
-            <span className="pw-detail-text">{startEndDates}</span>
+            <Users size={13} className="pw-detail-icon" />
+            <span className="pw-detail-text">
+              {badge.byName ? `By ${badge.byName}` : "By Top Educators"}
+            </span>
           </div>
         </div>
 
         {/* Pricing Row */}
         <div className="pw-pricing-row">
-          <span className="pw-price-free">₹ FREE</span>
-          <span className="pw-free-badge">100% Free For Students</span>
+          <span className="pw-price-free">
+            {priceDisplay}
+          </span>
+          <span className="pw-free-badge">100% Free</span>
         </div>
       </div>
 
-      {/* Action Buttons 50/50 Split */}
+      {/* Action Buttons */}
       <div className="pw-buttons-row">
         <button 
           className="pw-btn pw-btn-study"
@@ -93,12 +132,24 @@ const BadgeCard = ({
           Study Now
         </button>
         <button 
-          className="pw-btn pw-btn-unenroll"
-          onClick={() => {
-            alert(`Enrolled in ${badge.name}`);
+          className={`pw-btn ${isLiked ? 'pw-btn-enrolled' : 'pw-btn-enroll'}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onLike) onLike(badge.id);
           }}
         >
-          Enroll Now
+          {isLiked ? '✓ Saved' : 'Enroll'}
+        </button>
+        <button 
+          className={`pw-btn pw-btn-like-action ${isLiked ? 'liked' : ''}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onLike) onLike(badge.id);
+          }}
+          aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
+          style={{ flex: 'none', width: '38px', padding: 0 }}
+        >
+          <Heart size={16} fill={isLiked ? "#ef4444" : "none"} color={isLiked ? "#ef4444" : "#94a3b8"} />
         </button>
       </div>
     </GhostGlowCard>
