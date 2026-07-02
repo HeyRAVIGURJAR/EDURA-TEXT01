@@ -12,23 +12,23 @@
   --color-text-muted: #94A3B8;
   --color-text-subtle: #64748B;
   
-  /* Brand — Neon Purple + Deep Blue */
-  --color-primary: #8B5CF6;
-  --color-primary-light: #A855F7;
-  --color-secondary: #7C3AED;
-  --color-accent: #00BFFF;
-  --color-accent-secondary: #8B5CF6;
+  /* Brand — Physics Wallah Royal Blue + Cyan/Gold */
+  --color-primary: #5B56E6;
+  --color-primary-light: #726EFF;
+  --color-secondary: #3B82F6;
+  --color-accent: #F59E0B;
+  --color-accent-secondary: #5B56E6;
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   
   /* Premium Gradients */
-  --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #00BFFF 100%);
-  --gradient-hero: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 30%, #EC4899 60%, #00BFFF 100%);
-  --gradient-card: linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(0,191,255,0.06) 100%);
-  --gradient-glow: radial-gradient(ellipse at center, rgba(139,92,246,0.2) 0%, transparent 70%);
-  --gradient-border: linear-gradient(135deg, rgba(139,92,246,0.5), rgba(0,191,255,0.5));
-  --gradient-text: linear-gradient(135deg, #8B5CF6, #A855F7, #00BFFF);
+  --gradient-primary: linear-gradient(135deg, #5B56E6 0%, #3B82F6 50%, #00BFFF 100%);
+  --gradient-hero: linear-gradient(135deg, #5B56E6 0%, #3B82F6 30%, #F59E0B 60%, #00BFFF 100%);
+  --gradient-card: linear-gradient(135deg, rgba(91,86,230,0.12) 0%, rgba(0,191,255,0.06) 100%);
+  --gradient-glow: radial-gradient(ellipse at center, rgba(91,86,230,0.2) 0%, transparent 70%);
+  --gradient-border: linear-gradient(135deg, rgba(91,86,230,0.5), rgba(0,191,255,0.5));
+  --gradient-text: linear-gradient(135deg, #5B56E6, #3B82F6, #F59E0B);
 
   /* Glassmorphism Variables */
   --glass-bg: rgba(10, 10, 11, 0.6);
@@ -140,11 +140,11 @@
 .gradient-text {
   background: linear-gradient(
     to right,
-    #7928ca,
-    #ff0080,
-    #ff4d4d,
-    #00dfd8,
-    #7928ca
+    #5B56E6,
+    #3B82F6,
+    #F59E0B,
+    #00BFFF,
+    #5B56E6
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

@@ -194,7 +194,7 @@ const AITipWidget = () => {
     <motion.div className="db-widget ai-tip-widget" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
       <div className="ai-tip-header">
         <div className="ai-tip-icon"><Brain size={15} /></div>
-        <span>StudyBuddy AI</span>
+        <span>EW Saarthi AI</span>
       </div>
       <p className="ai-tip-text">"{tip}"</p>
       <button className="ai-tip-btn" onClick={() => navigate('/dashboard/ai-buddy')}>
@@ -314,7 +314,7 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
         <h1 className="db-greeting-text">
           {greeting()}, <span className="db-greeting-name">{user?.username || 'Student'}</span> 👋
         </h1>
-        <p className="db-greeting-sub">Your learning journey continues here.</p>
+        <p className="db-greeting-sub">India's Most Loved Educational Console. Your learning journey continues here.</p>
       </div>
 
       {/* Widgets Row */}

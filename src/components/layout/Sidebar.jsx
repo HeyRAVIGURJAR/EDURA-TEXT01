@@ -59,27 +59,54 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <div className="sidebar-header" style={{ padding: '0 0 12px 0', margin: 0, background: 'none', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="sidebar-logo" style={{ width: collapsed ? 'auto' : '100%', justifyContent: collapsed ? 'center' : 'flex-start' }}>
               {collapsed ? (
-                <div className="sidebar-logo-icon">E</div>
+                <div className="pw-logo-circle" style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  backgroundColor: '#000',
+                  color: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: '900',
+                  fontFamily: 'Outfit, sans-serif',
+                  border: '1.5px solid #5B56E6',
+                  fontSize: '11px'
+                }}>
+                  EW
+                </div>
               ) : (
-                <img 
-                  src="/artifacts/media__1782815915641.png" 
-                  alt="EDURA Logo" 
-                  className="logo-img-alt" 
-                  style={{ 
-                    transition: 'transform 0.3s ease', 
-                    cursor: 'pointer', 
-                    filter: 'invert(1)', 
-                    objectFit: 'contain',
+                <div className="pw-logo-container" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div className="pw-logo-circle" style={{
+                    width: '28px',
                     height: '28px',
-                    width: 'auto'
-                  }} 
-                  onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'} 
-                  onMouseOut={(e) => e.target.style.transform = 'scale(1)'} 
-                />
+                    borderRadius: '50%',
+                    backgroundColor: '#000',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: '900',
+                    fontFamily: 'Outfit, sans-serif',
+                    border: '1.5px solid #5B56E6',
+                    fontSize: '11px'
+                  }}>
+                    EW
+                  </div>
+                  <span className="pw-logo-text" style={{
+                    fontFamily: 'Outfit, sans-serif',
+                    fontWeight: '800',
+                    fontSize: '16px',
+                    letterSpacing: '0.5px',
+                    color: '#fff'
+                  }}>
+                    EDURA<span style={{ color: '#5B56E6', marginLeft: '2.5px' }}>WALLAH</span>
+                  </span>
+                </div>
               )}
             </div>
             <button className="sidebar-toggle" onClick={onToggle} aria-label="Toggle sidebar" style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer' }}>
-              {collapsed ? <ChevronRight size={14} color="#06b6d4" /> : <ChevronLeft size={14} color="#06b6d4" />}
+              {collapsed ? <ChevronRight size={14} color="#5B56E6" /> : <ChevronLeft size={14} color="#5B56E6" />}
             </button>
           </div>
 
@@ -127,7 +154,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
         </NavLink>
         <NavLink to="/dashboard/ott" className={({ isActive }) => `sidebar-link ott-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Clapperboard size={20} /></span>
-          <span className="sidebar-label">EDURA OTT</span>
+          <span className="sidebar-label">EW OTT</span>
           <span className="ott-badge">NEW</span>
         </NavLink>
 
@@ -169,7 +196,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
         <div className="sidebar-section-title">AI Tools</div>
         <NavLink to="/dashboard/ai-buddy" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Bot size={20} /></span>
-          <span className="sidebar-label">StudyBuddy AI</span>
+          <span className="sidebar-label">Saarthi AI Doubt Solver</span>
         </NavLink>
         <NavLink to="/dashboard/ai-quiz" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Lightbulb size={20} /></span>
@@ -223,7 +250,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
         </NavLink>
         <NavLink to="/dashboard/apps" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`} onClick={onMobileClose}>
           <span className="sidebar-icon"><Smartphone size={20} /></span>
-          <span className="sidebar-label">Get App</span>
+          <span className="sidebar-label">Download EW App</span>
         </NavLink>
         <button 
           onClick={(e) => {

@@ -13,7 +13,7 @@ const SUGGESTIONS = [
 
 const StudyBuddyAI = () => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi! I'm StudyBuddy, your AI tutor. I can explain complex concepts, solve doubts, or help you plan your study schedule. What would you like to learn today?", sender: "bot" }
+    { id: 1, text: "Hi! I'm Saarthi, your AI Doubt Solver. I can explain complex concepts, solve academic doubts, or help you plan your study schedule. What would you like to learn today?", sender: "bot" }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -102,10 +102,10 @@ const StudyBuddyAI = () => {
           </div>
           <div>
             <h2 className="ai-title">
-              StudyBuddy
-              <span className="ai-badge">Beta</span>
+              Saarthi AI
+              <span className="ai-badge">Doubt Solver</span>
             </h2>
-            <p className="ai-subtitle">Always online to help you study</p>
+            <p className="ai-subtitle">Always online to help you solve doubts</p>
           </div>
         </div>
         <div className="ai-header-actions">

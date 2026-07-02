@@ -12,20 +12,37 @@ const Header = () => {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
       <Link to="/dashboard/profile" className="header-logo-link" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-        <div className="header-logo">
-          <img 
-            src="/images/edura-logo-new.png" 
-            alt="Edura Logo" 
-            className="logo-image" 
-            onError={(e) => { 
-              e.target.src = '/images/logo-alt.jpg'; 
-              e.target.onerror = () => { 
-                e.target.style.display = 'none'; 
-                if (e.target.nextSibling) e.target.nextSibling.style.display = 'inline'; 
-              } 
-            }} 
-          />
-          <span className="logo-text" style={{display: 'none'}}>edu'ra</span>
+        <div className="pw-logo-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="pw-logo-circle" style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: '#000',
+            color: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: '950',
+            fontFamily: 'Outfit, sans-serif',
+            border: '2px solid #5B56E6',
+            boxShadow: '0 0 10px rgba(91, 86, 230, 0.4)',
+            fontSize: '14px',
+            letterSpacing: '-0.5px'
+          }}>
+            EW
+          </div>
+          <span className="pw-logo-text" style={{
+            fontFamily: 'Outfit, sans-serif',
+            fontWeight: '800',
+            fontSize: '18px',
+            letterSpacing: '0.5px',
+            background: 'linear-gradient(to right, #ffffff, #94a3b8)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block'
+          }}>
+            EDURA<span style={{ color: '#5B56E6', marginLeft: '2px' }}>WALLAH</span>
+          </span>
         </div>
       </Link>
 

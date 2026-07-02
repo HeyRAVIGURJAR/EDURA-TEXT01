@@ -121,7 +121,7 @@ const LandingPage = () => {
     { icon: <Bot size={28} />, title: 'StudyBuddy AI', desc: 'AI-powered doubt resolution chat. Ask any conceptual question and get instant, clear explanations.' },
     { icon: <Palette size={28} />, title: 'Theme Engine', desc: 'Full HSL customization with premium presets like Cyberpunk Red, Lavender Dreams, and Emerald City.' },
     { icon: <BarChart3 size={28} />, title: 'Performance Analytics', desc: 'Detailed insights into your learning patterns, test scores, and improvement areas with beautiful charts.' },
-    { icon: <Tv size={28} />, title: 'EDURA OTT', desc: 'Premium video lectures with resume-from-where-you-left, chapter markers, and multi-speed playback.' },
+    { icon: <Tv size={28} />, title: 'EW OTT', desc: 'Premium video lectures with resume-from-where-you-left, chapter markers, and multi-speed playback.' },
     { icon: <FormInput size={28} />, title: 'Mock Test Engine', desc: 'Timed tests with instant analytics, question-level breakdowns, and comparative performance metrics.' },
   ];
 
@@ -146,7 +146,7 @@ const LandingPage = () => {
     {
       plan: 'The Pro',
       price: '99',
-      desc: 'Unlock the full EDURA experience. No interruptions.',
+      desc: 'Unlock the full EDURA WALLAH experience. No interruptions.',
       featured: true,
       badge: (
         <span className="flex items-center gap-2">
@@ -156,7 +156,7 @@ const LandingPage = () => {
       ),
       savings: 'Save 40% vs Monthly',
       cta: 'Upgrade Now',
-      features: ['Everything in Starter', 'StudyBuddy AI chat for mastery', 'Mock tests to dominate exams', 'EDURA OTT premium access', 'Theme Engine customization', 'Priority 24/7 support'],
+      features: ['Everything in Starter', 'Saarthi AI chat for mastery', 'Mock tests to dominate exams', 'EW OTT premium access', 'Theme Engine customization', 'Priority 24/7 support'],
     },
     {
       plan: 'The Elite',
@@ -170,12 +170,12 @@ const LandingPage = () => {
       ),
       savings: 'Save 65% vs Monthly',
       cta: 'Join Elite Mastery',
-      features: ['Everything in Pro', '1-on-1 Mentorship for results', 'Custom personalized study plan', 'Exclusive elite content', 'Offline downloads', 'Certificate of Merit', 'EDURA MEMBERSHIP'],
+      features: ['Everything in Pro', '1-on-1 Mentorship for results', 'Custom personalized study plan', 'Exclusive elite content', 'Offline downloads', 'Certificate of Merit', 'EW MEMBERSHIP'],
     },
   ];
 
   const TESTIMONIALS = [
-    { name: 'Priya Sharma', role: 'JEE Aspirant', initials: 'PS', rating: 5.0, text: '"EDURA\'s gamified approach completely changed how I study. The streak system keeps me consistent, and the AI tutor explains concepts better than most textbooks."' },
+    { name: 'Priya Sharma', role: 'JEE Aspirant', initials: 'PS', rating: 5.0, text: '"EW\'s gamified approach completely changed how I study. The streak system keeps me consistent, and the AI tutor explains concepts better than most textbooks."' },
     { name: 'Rahul Verma', role: 'SSC CGL Student', initials: 'RV', rating: 4.5, text: '"The mock tests are incredibly realistic. My test scores improved by 35% in just two months. The analytics dashboard is a game-changer."' },
     { name: 'Ananya Gupta', role: 'UPSC Aspirant', initials: 'AG', rating: 4.8, text: '"I love the theme customization — studying at night with Lavender Dreams is so calming. Plus, the OTT-style video player is world-class."' },
     { name: 'Vikram Singh', role: 'NEET Aspirant', initials: 'VS', rating: 4.7, text: '"The Pomodoro focus engine combined with the background lofi beats helps me study for 6 hours straight without burning out. Incredible UI!"' },
@@ -200,9 +200,9 @@ const LandingPage = () => {
   };
 
   const FAQS = [
-    { q: 'Is EDURA free to use?', a: 'Yes! EDURA offers a comprehensive free tier with access to community features, basic analytics, and free batches. Premium features are available with the Pro and Elite plans.' },
+    { q: 'Is EDURA WALLAH free to use?', a: 'Yes! EDURA WALLAH offers a comprehensive free tier with access to community features, basic analytics, and free batches. Premium features are available with the Pro and Elite plans.' },
     { q: 'How does the XP and league system work?', a: 'You earn XP for daily logins (50 XP), watching videos (120 XP), and attempting tests (250 XP). Streak multipliers give +25% XP per consecutive day. As you progress through five tiers: Beginner, Achiever, Scholar, Ranker, and Legend.' },
-    { q: 'What is StudyBuddy AI?', a: 'StudyBuddy AI is your personal AI tutor that can explain any concept, solve doubts, and help you understand complex topics in simple language. Available 24/7 for Pro and Elite members.' },
+    { q: 'What is Saarthi AI?', a: 'Saarthi AI is your personal AI Doubt Solver that can explain any concept, solve doubts, and help you understand complex topics in simple language. Available 24/7 for Pro and Elite members.' },
   ];
 
   // Motion reveal specs for scroll reveals - optimized threshold and bypassed on mobile
@@ -290,8 +290,12 @@ const LandingPage = () => {
         {/* Single line container with horizontal scroll on small screens */}
         <div className="flex items-center justify-between px-4 md:px-8 w-full max-w-[100vw] overflow-x-auto hide-scrollbar gap-6">
           <div className="nav-logo flex items-center gap-2 cursor-pointer flex-shrink-0" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <img src="/images/edura-logo-new.png" alt="EDURA Logo" className="w-8 h-8 object-contain hover:rotate-12 transition-transform duration-300" onError={(e) => { e.target.src = '/logo.jpg'; e.target.onerror = () => e.target.style.display='none'; }} />
-            <span className="text-xl font-black tracking-tighter text-white">EDURA</span>
+            <div className="pw-logo-circle w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black border-2 border-[#5B56E6] shadow-[0_0_10px_rgba(91,86,230,0.4)] text-sm tracking-tighter select-none">
+              EW
+            </div>
+            <span className="text-xl font-black tracking-tight text-white select-none">
+              EDURA<span className="text-[#5B56E6] ml-0.5">WALLAH</span>
+            </span>
           </div>
           
           <div className="flex items-center gap-6 text-sm font-medium text-gray-300 flex-shrink-0 whitespace-nowrap">
@@ -321,15 +325,9 @@ const LandingPage = () => {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             style={{ marginBottom: '1.5rem', width: '100px', height: '100px' }}
           >
-            <img 
-              src="/images/edura-logo-new.png" 
-              alt="EDURA Logo" 
-              className="logo-floating-3d"
-              onError={(e) => {
-                e.target.src = '/logo.jpg';
-                e.target.onerror = () => e.target.style.display = 'none';
-              }} 
-            />
+            <div className="pw-logo-circle w-20 h-20 rounded-full bg-black text-white flex items-center justify-center font-black border-4 border-[#5B56E6] shadow-[0_0_20px_rgba(91,86,230,0.6)] text-2xl tracking-tighter select-none logo-floating-3d mx-auto">
+              EW
+            </div>
           </motion.div>
 
           <motion.div 
@@ -349,9 +347,9 @@ const LandingPage = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.15, margin: '1rem 0' }}
           >
-            Learn Smarter with <br/>
+            India's Most Loved Educational Platform <br/>
             <span className="relative inline-block mt-2">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 font-black tracking-tight hero-brand-text">EDURA</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#5B56E6] via-[#3B82F6] to-[#F59E0B] font-black tracking-tight hero-brand-text">EDURA WALLAH</span>
               <span className="absolute left-1/2 bottom-[-15px] -translate-x-1/2 w-[110%] h-[16px] overflow-visible pointer-events-none block">
                 <svg className="w-full h-full overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
                   {/* Faint Background Guide Line */}
@@ -673,7 +671,7 @@ const LandingPage = () => {
       <section className="cta-section">
         <motion.div className="cta-box" {...revealProps}>
           <h2>Ready to <span className="gradient-text">Transform</span> Your Learning?</h2>
-          <p>Join thousands of students who are already learning smarter with EDURA.</p>
+          <p>Join thousands of students who are already learning smarter with EDURA WALLAH.</p>
           <div className="cta-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
             <GlowButton onClick={handleConsoleRedirect}>
               Start Learning Free →
@@ -686,14 +684,16 @@ const LandingPage = () => {
       {/* ---- FOOTER ---- */}
       <footer className="landing-footer">
         <div className="footer-content">
-          <div className="footer-logo gradient-text">EDURA</div>
+          <div className="footer-logo font-black text-xl tracking-tight text-white">
+            EDURA<span className="text-[#5B56E6] ml-0.5">WALLAH</span>
+          </div>
           <div className="footer-links">
             <h4>Legal</h4>
             <Link to="/terms-of-master">Terms of Master</Link>
             <Link to="/privacy-policy">Privacy Policy</Link>
             <a href="#">Refund Policy</a>
           </div>
-          <div className="footer-copy">© 2026 EDURA. All rights reserved.</div>
+          <div className="footer-copy">© 2026 EDURA WALLAH. All rights reserved.</div>
         </div>
       </footer>
 
@@ -710,10 +710,10 @@ const LandingPage = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                className="w-16 h-16 border-4 border-t-[#8B5CF6] border-r-[#06B6D4] border-b-transparent border-l-transparent rounded-full mx-auto mb-6 shadow-[0_0_20px_rgba(139,92,246,0.5)]"
+                className="w-16 h-16 border-4 border-t-[#5B56E6] border-r-[#F59E0B] border-b-transparent border-l-transparent rounded-full mx-auto mb-6 shadow-[0_0_20px_rgba(91,86,230,0.5)]"
               />
               <h2 className="text-3xl font-black text-white mb-2 tracking-tighter">Waking up the Servers...</h2>
-              <p className="text-gray-400 font-medium">Redirecting to your EDURA Console...</p>
+              <p className="text-gray-400 font-medium">Redirecting to your EW Console...</p>
             </div>
           </motion.div>
         )}

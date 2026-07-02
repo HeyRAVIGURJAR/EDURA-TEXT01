@@ -77,11 +77,11 @@ const SUBJECT_CHIPS = [
 
 const BATCH_TABS = [
   { id: 'lectures', label: 'Lectures', count: MOCK_LECTURES.length },
-  { id: 'roadmap', label: 'Roadmap', count: MOCK_CHAPTERS.length },
-  { id: 'dpp', label: 'DPPs', count: MOCK_DPPS.length },
-  { id: 'notes', label: 'Notes', count: MOCK_NOTES.length },
-  { id: 'quiz', label: 'Quiz', count: MOCK_QUIZ.length },
-  { id: 'revision', label: 'Revision', count: 1 },
+  { id: 'notes', label: 'Class Notes', count: MOCK_NOTES.length },
+  { id: 'dpp', label: 'DPPs & Solutions', count: MOCK_DPPS.length },
+  { id: 'quiz', label: 'Live Test Series', count: MOCK_QUIZ.length },
+  { id: 'roadmap', label: 'Syllabus', count: MOCK_CHAPTERS.length },
+  { id: 'revision', label: 'Revision Hub', count: 1 },
 ];
 
 /* ── Difficulty Badge ── */
@@ -323,7 +323,7 @@ const LiveDppQuizPanel = () => {
     return (
       <div className="live-dpp-quiz-box glass-panel" style={{ padding: '1.4rem', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="quiz-progress-bar-track" style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
-          <div className="quiz-progress-bar-fill" style={{ height: '100%', background: 'linear-gradient(90deg, #8b5cf6, #0ea5e9)', width: `${((current + 1) / quizData.questions.length) * 100}%` }} />
+          <div className="quiz-progress-bar-fill" style={{ height: '100%', background: 'linear-gradient(90deg, var(--color-primary), #0ea5e9)', width: `${((current + 1) / quizData.questions.length) * 100}%` }} />
         </div>
         
         <div className="live-quiz-hud-header" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', fontSize: '0.78rem', color: '#64748b', fontWeight: 700 }}>
@@ -357,8 +357,8 @@ const LiveDppQuizPanel = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  background: isSelected ? 'rgba(139,92,246,0.1)' : 'rgba(255,255,255,0.02)',
-                  border: isSelected ? '1px solid #8b5cf6' : '1px solid rgba(255,255,255,0.06)',
+                  background: isSelected ? 'rgba(91,86,230,0.1)' : 'rgba(255,255,255,0.02)',
+                  border: isSelected ? '1px solid var(--color-primary)' : '1px solid rgba(255,255,255,0.06)',
                   color: isSelected ? '#fff' : '#cbd5e1',
                   padding: '0.8rem 1rem',
                   borderRadius: '10px',
@@ -372,7 +372,7 @@ const LiveDppQuizPanel = () => {
                   width: '24px',
                   height: '24px',
                   borderRadius: '6px',
-                  background: isSelected ? '#8b5cf6' : 'rgba(255,255,255,0.05)',
+                  background: isSelected ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)',
                   color: '#fff',
                   display: 'flex',
                   alignItems: 'center',
@@ -401,7 +401,7 @@ const LiveDppQuizPanel = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
-                background: '#8b5cf6',
+                background: 'var(--color-primary)',
                 border: 'none',
                 color: '#fff',
                 fontWeight: 700,
@@ -464,8 +464,8 @@ const LiveDppQuizPanel = () => {
   }
 
   return (
-    <div className="test-banner-card glass-panel" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(6, 182, 212, 0.03) 100%)', padding: '1.5rem', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="banner-badge" style={{ background: '#c084fc', color: '#000', fontSize: '0.6rem', fontWeight: 800, width: 'max-content', padding: '2px 6px', borderRadius: '4px' }}>LIVE API EXAM</div>
+    <div className="test-banner-card glass-panel" style={{ background: 'linear-gradient(135deg, rgba(91, 86, 230, 0.08) 0%, rgba(6, 182, 212, 0.03) 100%)', padding: '1.5rem', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="banner-badge" style={{ background: 'var(--color-accent)', color: '#000', fontSize: '0.6rem', fontWeight: 800, width: 'max-content', padding: '2px 6px', borderRadius: '4px' }}>LIVE API EXAM</div>
       <h3 style={{ margin: '0.2rem 0 0.1rem 0', fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.1rem', color: '#fff' }}>Official BrainBox DPP Live Quiz</h3>
       <p style={{ margin: 0, fontSize: '0.78rem', color: '#94a3b8', lineHeight: 1.4 }}>Attempt the live objective quiz fetched directly from official PW endpoints with step solution videos.</p>
       <button className="start-test-btn" style={{
@@ -473,7 +473,7 @@ const LiveDppQuizPanel = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '4px',
-        background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+        background: 'var(--gradient-primary)',
         border: 'none',
         color: '#fff',
         fontWeight: 800,
@@ -727,7 +727,7 @@ const BatchDetail = () => {
         <div className="bd-progress-ring-box">
           <svg className="progress-ring-svg" width="90" height="90">
             <circle className="progress-ring-circle-bg" stroke="rgba(255,255,255,0.06)" strokeWidth="6" fill="transparent" r="38" cx="45" cy="45" />
-            <circle className="progress-ring-circle" stroke="#8b5cf6" strokeWidth="6" fill="transparent" r="38" cx="45" cy="45" strokeDasharray="238.76" strokeDashoffset="76.4" />
+            <circle className="progress-ring-circle" stroke="var(--color-primary)" strokeWidth="6" fill="transparent" r="38" cx="45" cy="45" strokeDasharray="238.76" strokeDashoffset="76.4" />
           </svg>
           <div className="progress-ring-text">
             <span className="ring-pct">68%</span>
@@ -806,7 +806,7 @@ const BatchDetail = () => {
                   value={playerCurrentTime} 
                   onChange={handlePlayerProgressBarChange}
                   className="hud-slider"
-                  style={{ width: '100%', accentColor: '#8b5cf6', cursor: 'pointer', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.2)', appearance: 'none', outline: 'none' }}
+                  style={{ width: '100%', accentColor: 'var(--color-primary)', cursor: 'pointer', height: '4px', borderRadius: '2px', background: 'rgba(255,255,255,0.2)', appearance: 'none', outline: 'none' }}
                 />
 
                 {/* Actions row */}
@@ -831,7 +831,7 @@ const BatchDetail = () => {
                         step="0.1" 
                         value={playerIsMuted ? 0 : playerVolume} 
                         onChange={handlePlayerVolumeChange}
-                        style={{ width: '50px', accentColor: '#8b5cf6', cursor: 'pointer', height: '3px' }}
+                        style={{ width: '50px', accentColor: 'var(--color-primary)', cursor: 'pointer', height: '3px' }}
                       />
                     </div>
                     
@@ -848,7 +848,7 @@ const BatchDetail = () => {
                         <button 
                           key={rateStr}
                           style={{
-                            background: playerPlaybackRate === r ? '#8b5cf6' : 'rgba(255,255,255,0.06)',
+                            background: playerPlaybackRate === r ? 'var(--color-primary)' : 'rgba(255,255,255,0.06)',
                             border: 'none',
                             color: '#fff',
                             fontSize: '0.65rem',
@@ -1034,7 +1034,7 @@ const BatchDetail = () => {
         {activeTab === 'quiz' && (
           <motion.div key="quiz" className="bd-quiz-panel glass-panel" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             <div className="bd-quiz-header">
-              <Zap size={18} style={{ color: '#8b5cf6' }} />
+              <Zap size={18} style={{ color: 'var(--color-primary)' }} />
               <h3>Weekly Practice Quiz</h3>
               <span>{MOCK_QUIZ.length} Questions</span>
             </div>
@@ -1046,7 +1046,7 @@ const BatchDetail = () => {
           <motion.div key="revision" className="bd-revision-center" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             <div className="revision-hero glass-panel">
               <Award size={36} className="rev-icon" />
-              <h3>Edura Revision Center</h3>
+              <h3>EW Revision Center</h3>
               <p>Generate instant mind maps, cheat sheets, or trigger flashcards for Ray Optics.</p>
               <div className="revision-actions">
                 <button className="rev-action-btn" onClick={() => alert('Generating Mind Map...')}><BrainCircuit size={15} /> Formula Sheet</button>
