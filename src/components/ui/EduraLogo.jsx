@@ -15,7 +15,7 @@ const EduraLogo = ({ className = '', size = 32, subview = '', showText = true, s
       }}
     >
       <img
-        src="/images/edura-logo-new.png"
+        src={`${import.meta.env.BASE_URL || '/'}images/edura-logo-new.png`}
         alt="Edura"
         style={{
           width: `${size}px`,

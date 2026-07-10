@@ -36,7 +36,7 @@ const BadgeItem = React.memo(({ batch, onToggle }) => {
     id: batch._id, 
     name: batch.name, 
     description: batch.byName,
-    image: batch.previewImage || batch.photo || "/images/hero-2.png", 
+    image: batch.previewImage || batch.photo || `${import.meta.env.BASE_URL || '/'}images/hero-2.png`, 
     feeTotal: 0, 
     amount: 0,
     byName: batch.byName, 

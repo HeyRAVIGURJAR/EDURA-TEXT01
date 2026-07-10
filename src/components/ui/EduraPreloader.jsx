@@ -8,7 +8,7 @@ const EduraPreloader = ({ message = 'Loading...' }) => {
         <div className="preloader-glow-ring" />
         <div className="preloader-logo-container">
           <img
-            src="/images/edura-logo-new.png"
+            src={`${import.meta.env.BASE_URL || '/'}images/edura-logo-new.png`}
             alt="EDURA Loading"
             className="preloader-logo-img"
             onError={(e) => {

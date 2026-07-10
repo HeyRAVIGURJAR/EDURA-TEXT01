@@ -514,7 +514,7 @@ const LandingPage = () => {
                     }}
                   >
                     <ProgressiveImage 
-                      src={`/images/hero-${num}.png`} 
+                      src={`${import.meta.env.BASE_URL || '/'}images/hero-${num}.png`} 
                       alt={`Hero Preview ${num}`} 
                       className="theme-matched-image main-hero-img rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.65)] border border-white/10" 
                     />
