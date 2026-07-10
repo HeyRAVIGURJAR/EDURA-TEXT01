@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EDURA | Redirecting...</title>
+    <script>
+      // GitHub Pages SPA redirect hack
+      // Converts /path to /#/path so HashRouter can handle it
+      var pathSegmentsToKeep = 1; // for project pages (username.github.io/REPO-NAME/)
+      var l = window.location;
+      var repoPath = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/');
+      var appPath = l.pathname.slice(repoPath.length);
+      
+      // Only redirect if there's an actual path to redirect
+      if (appPath && appPath !== '/' && appPath !== '') {
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          repoPath + '/#' + appPath +
+          (l.search || '') +
+          (l.hash || '')
+        );
+      } else {
+        // No path to redirect, just go to root
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          repoPath + '/'
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <p style="font-family: sans-serif; text-align: center; margin-top: 40vh; color: #999;">
+      Redirecting to EDURA...
+    </p>
+  </body>
+</html>
