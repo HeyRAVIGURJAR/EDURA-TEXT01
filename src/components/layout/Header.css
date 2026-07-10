@@ -60,6 +60,7 @@
   display: flex;
   gap: 24px;
   align-items: center;
+  margin-left: 48px;
 }
 
 .nav-item {
@@ -132,3 +133,64 @@
   width: 14px;
   height: 14px;
 }
+
+/* Profile Dropdown Styles */
+.header-profile-trigger:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dropdown-item-hover {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item-hover:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: #fff !important;
+}
+
+.dropdown-item-hover-logout {
+  transition: background-color 0.2s;
+}
+
+.dropdown-item-hover-logout:hover {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: #f87171 !important;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Flowing border bottom animation to match river color flow */
+.desktop-header {
+  position: relative;
+}
+
+.desktop-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00f5ff, #9b51e0, #05ffc5, transparent);
+  background-size: 200% auto;
+  animation: borderGlowFlow 6s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes borderGlowFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+

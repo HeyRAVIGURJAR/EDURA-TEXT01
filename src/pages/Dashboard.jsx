@@ -3,17 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Loader2, X, Play, ChevronRight, Target, Zap,
   Flame, Clock, Brain, BookOpen, TrendingUp, CheckCircle,
-  Circle, Calendar, Star, ArrowRight, SkipForward
+  Circle, Calendar, Star, ArrowRight, SkipForward, ArrowLeft, ArrowUp
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import BadgeCard from '../components/features/BadgeCard';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
-import EduraPreloader from '../components/ui/EduraPreloader';
+
 import { fetchBatchesPaginated } from '../services/api';
 import { useOptimisticLike } from '../hooks/useOptimisticLike';
 import { useDebounce } from '../hooks/useDebounce';
 import TelegramPopup from '../components/ui/TelegramPopup';
 import { useAuthStore } from '../store/useAuthStore';
+import EduraLogo from '../components/ui/EduraLogo';
 import './Dashboard.css';
 
 const ITEMS_PER_PAGE = 9;
@@ -21,65 +22,31 @@ const FILTER_PILLS = [
   { id: 'all', label: 'All' },
   { id: 'free', label: 'Free' },
   { id: 'paid', label: 'Paid' },
+  { id: 'favorites', label: 'Favorites ❤️' },
 ];
 
 /* ── Badge Item wrapper ── */
-const BadgeItem = React.memo(({ batch }) => {
+const BadgeItem = React.memo(({ batch, onToggle }) => {
   const { isLiked, toggleLike } = useOptimisticLike(batch._id);
+  const handleLikeToggle = async (id) => {
+    await toggleLike();
+    if (onToggle) onToggle(id);
+  };
   const badgeData = {
     id: batch._id, 
     name: batch.name, 
     description: batch.byName,
-    image: batch.previewImage || batch.photo || "/images/hero-1.png", 
+    image: batch.previewImage || batch.photo || "/images/hero-2.png", 
     feeTotal: 0, 
     amount: 0,
     byName: batch.byName, 
     subjects: batch.subjects, 
     subjectCount: batch.subjectCount,
   };
-  return <BadgeCard badge={badgeData} isLiked={isLiked} onLike={toggleLike} />;
+  return <BadgeCard badge={badgeData} isLiked={isLiked} onLike={handleLikeToggle} />;
 });
 
-/* ── Continue Learning Widget ── */
-const ContinueLearningCard = () => {
-  const [lecture, setLecture] = useState(null);
-  const navigate = useNavigate();
-  useEffect(() => {
-    try {
-      const s = localStorage.getItem('edura_last_lecture');
-      if (s) setLecture(JSON.parse(s));
-    } catch (_) {}
-  }, []);
-  if (!lecture) return null;
-  return (
-    <motion.div
-      className="db-widget continue-widget"
-      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-      onClick={() => lecture.batchId && navigate(`/dashboard/batch/${lecture.batchId}`)}
-    >
-      <div className="continue-left">
-        <div className="continue-play-wrap">
-          <Play size={18} fill="white" color="white" />
-        </div>
-        <div className="continue-info">
-          <span className="continue-eyebrow">Continue Watching</span>
-          <h4 className="continue-title">{lecture.title}</h4>
-          <div className="continue-meta">
-            {lecture.batchName && <span>{lecture.batchName}</span>}
-            <span className="dot">·</span>
-            <Clock size={11} /> <span>Resume</span>
-          </div>
-          <div className="continue-bar-track">
-            <div className="continue-bar-fill" style={{ width: '55%' }} />
-          </div>
-        </div>
-      </div>
-      <button className="continue-resume-btn">
-        Resume <ChevronRight size={14} />
-      </button>
-    </motion.div>
-  );
-};
+
 
 /* ── Today's Goal Widget ── */
 const TodayGoalCard = () => {
@@ -180,66 +147,16 @@ const ExamCountdown = () => {
   );
 };
 
-/* ── AI Tip Widget ── */
-const AITipWidget = () => {
-  const navigate = useNavigate();
-  const tips = [
-    "Focus on Electrostatics today — you've been skipping it for 3 days.",
-    "Your accuracy in Organic Chemistry dropped 12% this week. Revise reactions.",
-    "You're 2 lectures away from completing Chapter 3. Finish it today!",
-    "Top performers solve 20 DPPs per day. You solved 4 yesterday.",
-  ];
-  const tip = tips[Math.floor(Math.random() * tips.length)];
-  return (
-    <motion.div className="db-widget ai-tip-widget" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
-      <div className="ai-tip-header">
-        <div className="ai-tip-icon"><Brain size={15} /></div>
-        <span>EW Saarthi AI</span>
-      </div>
-      <p className="ai-tip-text">"{tip}"</p>
-      <button className="ai-tip-btn" onClick={() => navigate('/dashboard/ai-buddy')}>
-        Ask AI <ArrowRight size={13} />
-      </button>
-    </motion.div>
-  );
-};
 
-/* ── Bottom Continue Player ── */
-const BottomPlayer = () => {
-  const navigate = useNavigate();
-  const [lecture, setLecture] = useState(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    try {
-      const s = localStorage.getItem('edura_last_lecture');
-      if (s) { const d = JSON.parse(s); if (d?.title) { setLecture(d); setVisible(true); } }
-    } catch (_) {}
-  }, []);
-  const handleDismiss = (e) => { e.stopPropagation(); setVisible(false); localStorage.removeItem('edura_last_lecture'); };
-  return (
-    <AnimatePresence>
-      {visible && lecture && (
-        <motion.div className="bottom-player glass-panel" initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 28 }} onClick={() => lecture.batchId && navigate(`/dashboard/batch/${lecture.batchId}`)}>
-          <button className="play-btn" onClick={(e) => { e.stopPropagation(); lecture.batchId && navigate(`/dashboard/batch/${lecture.batchId}`); }}>
-            <Play size={20} fill="currentColor" />
-          </button>
-          <div className="player-info">
-            <span className="player-status">CONTINUE WATCHING</span>
-            <h4>{lecture.title}</h4>
-            <div className="player-progress">
-              {lecture.batchName && <span>{lecture.batchName}</span>}
-              <span className="dot">·</span><span>Resume</span><ChevronRight size={12} />
-            </div>
-          </div>
-          <button className="player-close" onClick={handleDismiss} aria-label="Close player"><X size={18} /></button>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+
+
 
 /* ── Main Dashboard ── */
 const Dashboard = ({ showFavoritesOnly = false }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isBatchesPage = location.pathname.endsWith('/batches');
+
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -251,10 +168,31 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
   const [total, setTotal] = useState(0);
   const user = useAuthStore((s) => s.user);
 
+  // Sticky UI Helpers
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
+  const [pullRefreshing, setPullRefreshing] = useState(false);
+
+  const startYRef = useRef(0);
+  const isPullingRef = useRef(false);
+
   const observerRef = useRef(null);
   const sentinelRef = useRef(null);
   const abortRef = useRef(null);
   const debouncedQuery = useDebounce(searchQuery, 400);
+
+  // Monitor Scroll for Scroll-to-Top Button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     setBatches([]); setPage(1); setHasMore(true); setLoading(true); setInitialLoad(true);
@@ -266,8 +204,14 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
     try {
       const result = await fetchBatchesPaginated(pageNum, ITEMS_PER_PAGE, debouncedQuery, abortRef.current.signal);
       let filtered = result.data;
-      if (activeFilter === 'free') filtered = filtered.filter(b => !b.feeTotal || b.feeTotal === 0);
-      else if (activeFilter === 'paid') filtered = filtered.filter(b => b.feeTotal && b.feeTotal > 0);
+      if (activeFilter === 'free') {
+        filtered = filtered.filter(b => !b.feeTotal || b.feeTotal === 0);
+      } else if (activeFilter === 'paid') {
+        filtered = filtered.filter(b => b.feeTotal && b.feeTotal > 0);
+      } else if (activeFilter === 'favorites') {
+        const likes = JSON.parse(localStorage.getItem('edura_likes')) || {};
+        filtered = filtered.filter(b => likes[b._id]);
+      }
       if (showFavoritesOnly) {
         const likes = JSON.parse(localStorage.getItem('edura_likes')) || {};
         filtered = filtered.filter(b => likes[b._id]);
@@ -275,7 +219,7 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
       if (pageNum === 1) setBatches(filtered);
       else setBatches(prev => [...prev, ...filtered]);
       setHasMore(result.hasMore);
-      setTotal(result.total);
+      setTotal(filtered.length);
     } catch (err) {
       if (err.name !== 'AbortError') console.error(err);
     } finally {
@@ -296,6 +240,37 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
     return () => observerRef.current?.disconnect();
   }, [hasMore, loading, loadingMore]);
 
+  const handleTouchStart = (e) => {
+    if (window.scrollY === 0) {
+      startYRef.current = e.touches[0].pageY;
+      isPullingRef.current = true;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isPullingRef.current || window.scrollY > 0) return;
+    const currentY = e.touches[0].pageY;
+    const deltaY = currentY - startYRef.current;
+    if (deltaY > 0) {
+      setPullDistance(Math.min(deltaY * 0.45, 80));
+    }
+  };
+
+  const handleTouchEnd = async () => {
+    isPullingRef.current = false;
+    if (pullDistance > 60 && !loading && !loadingMore && !pullRefreshing) {
+      setPullRefreshing(true);
+      setPullDistance(50);
+      try {
+        await fetchData(1);
+      } catch (err) {
+        console.error(err);
+      }
+      setPullRefreshing(false);
+    }
+    setPullDistance(0);
+  };
+
   const greeting = () => {
     const h = new Date().getHours();
     if (h < 12) return 'Good Morning';
@@ -303,36 +278,76 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
     return 'Good Evening';
   };
 
-  if (initialLoad) return <EduraPreloader message="Loading your dashboard..." />;
+  if (initialLoad) return (
+    <div className="dashboard-layout" style={{ padding: '2rem' }}>
+      <div className="db-greeting">
+        <div className="skel-bone" style={{ height: '28px', width: '280px', borderRadius: '8px', marginBottom: '8px' }} />
+        <div className="skel-bone" style={{ height: '14px', width: '400px', borderRadius: '6px' }} />
+      </div>
+      <div className="db-widgets-row" style={{ marginTop: '1.5rem' }}>
+        {[1, 2, 3].map(i => <div key={i} className="skel-bone" style={{ height: '140px', flex: 1, borderRadius: '18px' }} />)}
+      </div>
+      <div style={{ marginTop: '2rem' }}>
+        <div className="skel-bone" style={{ height: '20px', width: '160px', borderRadius: '6px', marginBottom: '1.2rem' }} />
+      </div>
+      <section className="bento-grid dashboard-grid">
+        {Array.from({ length: 6 }).map((_, i) => <SkeletonLoader key={i} />)}
+      </section>
+    </div>
+  );
 
   return (
-    <div className="dashboard-layout">
+    <div 
+      className="dashboard-layout"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <TelegramPopup />
 
-      {/* Greeting */}
-      <div className="db-greeting">
-        <h1 className="db-greeting-text">
-          {greeting()}, <span className="db-greeting-name">{user?.username || 'Student'}</span> 👋
-        </h1>
-        <p className="db-greeting-sub">India's Most Loved Educational Console. Your learning journey continues here.</p>
+      {isBatchesPage && (
+        <div className="batches-sticky-header">
+          <button className="batches-back-btn" onClick={() => navigate('/dashboard')} aria-label="Back to Dashboard">
+            <ArrowLeft size={18} />
+          </button>
+          <div className="batches-header-info" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <EduraLogo size={28} showText={true} />
+            <span className="batches-breadcrumbs">Dashboard &gt; My Batches</span>
+          </div>
+        </div>
+      )}
+
+      {/* Pull to Refresh Indicator */}
+      <div className="pull-refresh-indicator" style={{ height: pullDistance > 0 ? `${pullDistance}px` : '0px' }}>
+        <Loader2 size={24} className="spinner" style={{ color: 'var(--color-primary)', animation: 'spin 1s linear infinite' }} />
       </div>
 
-      {/* Widgets Row */}
-      <div className="db-widgets-row">
-        <ContinueLearningCard />
-        <TodayGoalCard />
-        <StreakWidget />
-        <ExamCountdown />
-        <AITipWidget />
-      </div>
+      {!isBatchesPage && (
+        <>
+          {/* Greeting */}
+          <div className="db-greeting">
+            <h1 className="db-greeting-text">
+              {greeting()}, <span className="db-greeting-name">{user?.username || 'Student'}</span> 👋
+            </h1>
+            <p className="db-greeting-sub">Next-Gen Educational Console. Your learning journey continues here.</p>
+          </div>
 
-      {/* Section Header for Batches */}
-      <div className="db-section-header">
-        <h2 className="db-section-title">
-          {showFavoritesOnly ? '❤️ My Saved Batches' : '🎓 All Batches'}
-        </h2>
-        <span className="db-section-count">{total} available</span>
-      </div>
+          {/* Widgets Row */}
+          <div className="db-widgets-row">
+            <TodayGoalCard />
+            <StreakWidget />
+            <ExamCountdown />
+          </div>
+
+          {/* Section Header for Batches */}
+          <div className="db-section-header">
+            <h2 className="db-section-title flowing-underline">
+              {showFavoritesOnly ? '❤️ My Saved Batches' : '🎓 All Batches'}
+            </h2>
+            <span className="db-section-count">{total} available</span>
+          </div>
+        </>
+      )}
 
       {/* Search Bar */}
       <div className="dashboard-search">
@@ -362,7 +377,11 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
             : batches.length > 0
               ? batches.map((batch, i) => (
                 <motion.div key={batch._id} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.04, 0.25), duration: 0.28 }}>
-                  <BadgeItem batch={batch} />
+                  <BadgeItem batch={batch} onToggle={(id) => {
+                    if (activeFilter === 'favorites' || showFavoritesOnly) {
+                      setBatches(prev => prev.filter(b => b._id !== id));
+                    }
+                  }} />
                 </motion.div>
               ))
               : (
@@ -392,7 +411,15 @@ const Dashboard = ({ showFavoritesOnly = false }) => {
         <div className="end-of-list"><span>You've seen all {total} batches 🎉</span></div>
       )}
 
-      <BottomPlayer />
+      {/* Floating Scroll-to-Top Button */}
+      <button 
+        className={`scroll-to-top-btn ${showScrollTop ? 'visible' : ''}`}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={20} />
+      </button>
+
     </div>
   );
 };

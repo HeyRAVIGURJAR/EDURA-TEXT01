@@ -9,6 +9,7 @@ import { useNotificationStore } from '../store/useNotificationStore';
 import { useOptimisticLike } from '../hooks/useOptimisticLike';
 import { batchCache } from '../utils/batch-cache';
 import BadgeCard from '../components/features/BadgeCard';
+import EduraLogo from '../components/ui/EduraLogo';
 import './RevisionPage.css';
 
 // BadgeCard Item Wrapper for Favorites List
@@ -25,7 +26,7 @@ const FavBadgeItem = React.memo(({ batch, onUnliked }) => {
     id: batch._id, 
     name: batch.name, 
     description: batch.byName,
-    image: batch.previewImage || batch.photo || "/images/hero-1.png", 
+    image: batch.previewImage || batch.photo || "/images/hero-2.png", 
     feeTotal: 0, 
     amount: 0,
     byName: batch.byName, 
@@ -117,7 +118,7 @@ const RevisionPage = () => {
 
       <div className="revision-header-row">
         <div>
-          <h1 className="revision-title">Your Revision Locker</h1>
+          <EduraLogo size={42} subview={activeTab.toUpperCase()} />
           <p className="revision-subtitle">Access your bookmarked keynotes, favorite courses, and offline study cache.</p>
         </div>
       </div>

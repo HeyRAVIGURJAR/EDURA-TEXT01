@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Mic } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { sanitizeInput } from '../../utils/sanitize';
 import { askStudyBuddy } from '../../services/api';
 import './StudyBuddyAI.css';

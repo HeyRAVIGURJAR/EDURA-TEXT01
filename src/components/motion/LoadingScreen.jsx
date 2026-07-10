@@ -1,74 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-/**
- * LoadingScreen — Leonardo-Style cinematic preloader.
- * A dark overlay that fades out after content loads, revealing the page
- * with a staggered hero animation underneath.
- */
 const LoadingScreen = ({ onComplete }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [mounted, setMounted] = useState(true);
+  const [directionClass, setDirectionClass] = useState('');
 
   useEffect(() => {
-    // Allow content to mount behind the overlay, then fade out
+    let nextDirection = 'right-to-left';
+    try {
+      const stored = sessionStorage.getItem('currentWaveDirection');
+      if (stored === 'right-to-left') {
+        nextDirection = 'left-to-right';
+      } else {
+        nextDirection = 'right-to-left';
+      }
+      sessionStorage.setItem('currentWaveDirection', nextDirection);
+    } catch (e) {
+      console.error("sessionStorage error:", e);
+    }
+
+    setDirectionClass(nextDirection === 'right-to-left' ? 'wave-only-rtl' : 'wave-only-ltr');
+
     const timer = setTimeout(() => {
-      setIsVisible(false);
-      if (onComplete) setTimeout(onComplete, 600);
+      setMounted(false);
+      if (onComplete) onComplete();
     }, 1200);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
 
+  if (!mounted) return null;
+
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
-          style={{ background: '#000' }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    <div 
+      className="fixed inset-0 z-[99999] bg-black flex items-center justify-center overflow-hidden pointer-events-none"
+      style={{
+        animation: 'fadeOutBg 0.3s ease 0.9s forwards'
+      }}
+    >
+      {/* Hollywood Light Wave Overlay Container */}
+      <div className={`hollywood-wave-container ${directionClass}`} />
+
+      {/* Cinematic Logo in the center */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
+          zIndex: 2,
+          animation: 'dissolveLogo 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+        }}
+      >
+        <h1 
+          className="cinematic-gradient-text" 
+          style={{ 
+            fontFamily: "'Inter', 'Outfit', sans-serif",
+            fontWeight: '900',
+            fontSize: '54px',
+            letterSpacing: '-0.04em',
+            margin: 0,
+            textTransform: 'uppercase'
+          }}
         >
-          {/* Animated Logo */}
-          <motion.div
-            className="flex flex-col items-center gap-4"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 1.1, opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.div
-              className="w-16 h-16 relative"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            >
-              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-purple-500 border-r-cyan-500" />
-            </motion.div>
+          EDURA
+        </h1>
+        <p 
+          style={{ 
+            color: '#8b5cf6', 
+            fontSize: '11px', 
+            fontWeight: '800', 
+            letterSpacing: '0.15em', 
+            margin: '8px 0 0 0',
+            textTransform: 'uppercase'
+          }}
+        >
+          PREMIUM LEARNING CONSOLE
+        </p>
+      </div>
 
-            <motion.h1
-              className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              EDURA
-            </motion.h1>
+      <style>{`
+        .hollywood-wave-container {
+          position: fixed;
+          top: 0;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+          z-index: 9999;
+        }
 
-            <motion.p
-              className="text-xs text-gray-500 font-light tracking-widest uppercase"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              Loading Experience...
-            </motion.p>
-          </motion.div>
+        .wave-only-rtl {
+          left: 0;
+          background: linear-gradient(to right, transparent, #00f5ff, #9b51e0, transparent);
+          animation: sweepRightToLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          will-change: transform, opacity;
+        }
 
-          {/* Ambient glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-purple-600/10 blur-[100px] pointer-events-none" />
-        </motion.div>
-      )}
-    </AnimatePresence>
+        .wave-only-ltr {
+          left: 0;
+          background: linear-gradient(to right, transparent, #9b51e0, #00f5ff, transparent);
+          animation: sweepLeftToRight 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          will-change: transform, opacity;
+        }
+
+        @keyframes sweepRightToLeft {
+          0% { transform: translateX(100vw); opacity: 1; }
+          100% { transform: translateX(-100vw); opacity: 0; }
+        }
+
+        @keyframes sweepLeftToRight {
+          0% { transform: translateX(-100vw); opacity: 1; }
+          100% { transform: translateX(100vw); opacity: 0; }
+        }
+
+        @keyframes dissolveLogo {
+          0% { opacity: 0; transform: translate(-50%, -42%) scale(0.96); }
+          15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          75% { opacity: 1; }
+          100% { opacity: 0; transform: translate(-50%, -58%) scale(1.04); }
+        }
+
+        @keyframes fadeOutBg {
+          0% { background-color: rgba(0, 0, 0, 1); }
+          100% { background-color: rgba(0, 0, 0, 0); }
+        }
+      `}</style>
+    </div>
   );
 };
 

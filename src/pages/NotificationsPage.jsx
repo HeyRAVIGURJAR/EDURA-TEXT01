@@ -20,6 +20,9 @@ const NotificationsPage = () => {
   const [prefExams, setPrefExams] = useState(true);
   const [prefCommunity, setPrefCommunity] = useState(false);
 
+  // Simulation delay state
+  const [simulationDelay, setSimulationDelay] = useState(3); // default 3s
+
   // Admin Broadcast states
   const [broadcastMsg, setBroadcastMsg] = useState('');
   const [broadcastType, setBroadcastType] = useState('broadcast');
@@ -51,7 +54,22 @@ const NotificationsPage = () => {
   };
 
   // Trigger simulated push notification (both browser push and local store toast)
-  const triggerMockPush = (message, delaySeconds = 3) => {
+  const triggerMockPush = (message, type = 'info', delaySeconds = simulationDelay) => {
+    if (delaySeconds === 0) {
+      addNotification({
+        message: message,
+        type: type,
+        autoDismiss: type !== 'broadcast'
+      });
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new window.Notification('EDURA Push Alert', {
+          body: message,
+          icon: '/images/edura-logo-new.png'
+        });
+      }
+      return;
+    }
+
     addNotification({
       message: `Simulating push in ${delaySeconds} seconds... Keep window active.`,
       type: 'info'
@@ -61,8 +79,8 @@ const NotificationsPage = () => {
       // 1. Dispatch local toast
       addNotification({
         message: message,
-        type: 'broadcast',
-        autoDismiss: false
+        type: type,
+        autoDismiss: type !== 'broadcast'
       });
 
       // 2. Dispatch browser native push if supported/granted
@@ -73,6 +91,50 @@ const NotificationsPage = () => {
         });
       }
     }, delaySeconds * 1000);
+  };
+
+  // Trigger a sequential stagger of different alert types at spaced time intervals
+  const triggerStaggeredSequence = () => {
+    addNotification({
+      message: "Queued Staggered Simulation: 4 alerts will arrive at intervals of 2s, 8s, 15s, and 25s!",
+      type: "info"
+    });
+
+    // Alert 1: Live Class Alert in 2 seconds
+    setTimeout(() => {
+      addNotification({
+        message: "🚨 Live Class Started: Alakh Sir is teaching 'Wave Optics 01' live now! 🎥",
+        type: 'broadcast',
+        autoDismiss: false
+      });
+    }, 2000);
+
+    // Alert 2: Homework Assignment due in 8 seconds
+    setTimeout(() => {
+      addNotification({
+        message: "📝 Homework Assignment: 'Electrostatics DPP-04' submission deadline is in 4 hours.",
+        type: 'warning',
+        autoDismiss: true
+      });
+    }, 8000);
+
+    // Alert 3: Daily Reward in 15 seconds
+    setTimeout(() => {
+      addNotification({
+        message: "🎁 Daily Streak Reward: Congratulations! You earned +15 XP for keeping your 5-day streak alive.",
+        type: 'success',
+        autoDismiss: true
+      });
+    }, 15000);
+
+    // Alert 4: Doubt Answered in 25 seconds
+    setTimeout(() => {
+      addNotification({
+        message: "💬 Doubt Resolved: Educator Vikram has answered your query on Organic Chemistry reaction mechanisms.",
+        type: 'info',
+        autoDismiss: true
+      });
+    }, 25000);
   };
 
   const handleAdminSend = (e) => {
@@ -159,25 +221,93 @@ const NotificationsPage = () => {
           </div>
 
           {/* Simulated Push Triggers */}
-          <div className="notif-card glass-panel">
+          <div className="notif-card glass-panel animate-pulse-glow">
             <div className="card-header">
               <Sparkles size={18} className="icon-cyan" />
               <h3>Simulate Push Alerts</h3>
             </div>
             <p className="card-desc">Simulate scheduled educational notifications to verify the notification listener works.</p>
             
-            <div className="simulation-actions">
+            {/* Custom Delay Selector */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', margin: '0.5rem 0' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Choose Delivery Delay</span>
+              <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '12px', width: 'fit-content', border: '1px solid rgba(255,255,255,0.05)' }}>
+                {[0, 3, 10, 30].map(seconds => (
+                  <button 
+                    key={seconds}
+                    type="button"
+                    onClick={() => setSimulationDelay(seconds)}
+                    style={{
+                      border: 'none',
+                      background: simulationDelay === seconds ? 'var(--color-primary, #5B56E6)' : 'transparent',
+                      color: simulationDelay === seconds ? '#fff' : '#94a3b8',
+                      fontSize: '0.72rem',
+                      fontWeight: '700',
+                      padding: '5px 12px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {seconds === 0 ? 'Instant' : `${seconds}s`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Individual Alert Triggers */}
+            <div className="simulation-actions" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               <button 
                 className="sim-btn" 
-                onClick={() => triggerMockPush("🚨 Live Class Alert: Alakh Sir has started 'Ray Optics 05' live now! Join immediately.", 3)}
+                onClick={() => triggerMockPush("🚨 Live Class Alert: Alakh Sir has started 'Ray Optics 05' live now! Join immediately.", "broadcast")}
+                style={{ fontSize: '0.76rem', padding: '10px 12px' }}
               >
-                Simulate Live Class Alert (3s)
+                🎥 Live Class Start
               </button>
               <button 
                 className="sim-btn" 
-                onClick={() => triggerMockPush("⏰ Test Series Reminder: JEE Mock Test - 08 starts in 10 minutes. Keep formula sheet ready!", 5)}
+                onClick={() => triggerMockPush("⏰ Homework Assignment: 'Rotational Motion DPP-02' is pending. Complete task today!", "warning")}
+                style={{ fontSize: '0.76rem', padding: '10px 12px' }}
               >
-                Simulate Exam Reminder (5s)
+                ⚠️ Pending DPP Alert
+              </button>
+              <button 
+                className="sim-btn" 
+                onClick={() => triggerMockPush("🏆 Leaderboard Climb: You climbed 4 spots today to reach Scholar Rank #12!", "success")}
+                style={{ fontSize: '0.76rem', padding: '10px 12px' }}
+              >
+                ✨ Leaderboard Update
+              </button>
+              <button 
+                className="sim-btn" 
+                onClick={() => triggerMockPush("💬 Doubt Solved: Assistant Educator Vivek has resolved your Physics question.", "info")}
+                style={{ fontSize: '0.76rem', padding: '10px 12px' }}
+              >
+                💬 Doubt Resolved
+              </button>
+            </div>
+
+            {/* Staggered Timeline Sequence Trigger */}
+            <div style={{ marginTop: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1rem' }}>
+              <button
+                className="sim-btn"
+                onClick={triggerStaggeredSequence}
+                style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, rgba(91, 86, 230, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
+                  borderColor: 'rgba(91, 86, 230, 0.3)',
+                  color: '#c084fc',
+                  textAlign: 'center',
+                  fontWeight: '800',
+                  fontSize: '0.78rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  padding: '12px'
+                }}
+              >
+                🚀 Trigger Staggered Sequence (2s, 8s, 15s, 25s)
               </button>
             </div>
           </div>

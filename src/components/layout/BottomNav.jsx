@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Library, Clapperboard, Bot, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Library, Clapperboard, Heart, MoreHorizontal } from 'lucide-react';
 import './BottomNav.css';
 
 const BottomNav = () => {
@@ -26,15 +26,15 @@ const BottomNav = () => {
           </NavLink>
         </li>
         <li className="bottom-nav-item">
-          <NavLink to="/dashboard/ai-buddy" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="bnav-icon"><Bot size={20} /></span>
-            AI
+          <NavLink to="/dashboard/favorites" className={({ isActive }) => isActive ? 'active' : ''}>
+            <span className="bnav-icon"><Heart size={20} /></span>
+            Saved
           </NavLink>
         </li>
         <li className="bottom-nav-item">
-          <NavLink to="/dashboard/community" className={({ isActive }) => isActive ? 'active' : ''}>
-            <span className="bnav-icon"><MessageSquare size={20} /></span>
-            Social
+          <NavLink to="/dashboard/more" className={({ isActive }) => isActive ? 'active' : ''}>
+            <span className="bnav-icon"><MoreHorizontal size={20} /></span>
+            More
           </NavLink>
         </li>
       </ul>

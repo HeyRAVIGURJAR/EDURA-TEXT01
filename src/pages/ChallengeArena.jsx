@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swords, Trophy, Users, ShieldAlert, XCircle } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import EduraLogo from '../components/ui/EduraLogo';
 
 const ChallengeArena = () => {
   const { user, addXP } = useAuthStore();
@@ -71,12 +72,7 @@ const ChallengeArena = () => {
     <div className="p-6 max-w-6xl mx-auto min-h-[calc(100vh-80px)]">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Swords className="text-red-500" size={32} />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">
-              Challenge Arena
-            </span>
-          </h1>
+          <EduraLogo size={42} subview="CHALLENGE ARENA" />
           <p className="text-gray-400 mt-2">1v1 Peer Battles. Winner takes the glory.</p>
         </div>
         <div className="px-4 py-2 bg-[#18181b] rounded-xl border border-white/10 flex items-center gap-3">

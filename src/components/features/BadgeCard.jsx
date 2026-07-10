@@ -21,9 +21,9 @@ const BadgeCard = ({
   // Derive subjects/content count
   const subjectCount = badge.subjects?.length || badge.subjectCount || null;
 
-  // Handle study navigation
+  // Handle study navigation — Coming Soon
   const handleStudyClick = () => {
-    navigate(`/dashboard/batch/${badge.id}`);
+    alert('Coming Soon! 🚀 Our educators are preparing premium content for this batch. Stay tuned!');
   };
 
   const targetDesc = badge.description || "Targeted Batch for JEE/NEET & CBSE Boards Aspirants";
@@ -41,7 +41,7 @@ const BadgeCard = ({
       {/* Thumbnail Area */}
       <div className="pw-image-wrap">
         <ImageOptimizer 
-          src={badge.image || "/images/hero-1.png"} 
+          src={badge.image || "/images/hero-2.png"} 
           alt={badge.name} 
           className="pw-thumbnail w-full"
         />
@@ -59,31 +59,7 @@ const BadgeCard = ({
           whileTap={{ scale: 0.85 }}
           style={{ zIndex: 99 }}
         >
-          <AnimatePresence mode="wait">
-            {isLiked ? (
-              <motion.span
-                key="liked"
-                initial={{ scale: 0, rotate: -20 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0 }}
-                transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-                className="like-icon-inner"
-              >
-                <Heart size={16} fill="#ef4444" color="#ef4444" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="unliked"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-                transition={{ duration: 0.15 }}
-                className="like-icon-inner"
-              >
-                <Heart size={16} fill="none" color="#94a3b8" />
-              </motion.span>
-            )}
-          </AnimatePresence>
+          <Heart size={16} fill={isLiked ? "#ef4444" : "rgba(0,0,0,0.3)"} color={isLiked ? "#ef4444" : "#cbd5e1"} />
         </motion.button>
       </div>
 
@@ -139,17 +115,6 @@ const BadgeCard = ({
           }}
         >
           {isLiked ? '✓ Saved' : 'Enroll'}
-        </button>
-        <button 
-          className={`pw-btn pw-btn-like-action ${isLiked ? 'liked' : ''}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onLike) onLike(badge.id);
-          }}
-          aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
-          style={{ flex: 'none', width: '38px', padding: 0 }}
-        >
-          <Heart size={16} fill={isLiked ? "#ef4444" : "none"} color={isLiked ? "#ef4444" : "#94a3b8"} />
         </button>
       </div>
     </GhostGlowCard>

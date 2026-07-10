@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta name="description" content="EDURA — India's Most Loved Educational Platform with gamified dashboard, live classes, mock tests, and performance analytics. Learn smarter, not harder." />
+    <meta name="keywords" content="education, AI, learning, gamification, mock tests, live classes, study buddy, edura" />
+    <title>EDURA | India's Most Loved Educational Platform</title>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Critical Assets Preload -->
+    <link rel="preload" as="image" href="./images/disine-1.png" />
+    <link rel="preload" as="image" href="/images/disine-2.png" />
+    <!-- Tailwind Play CDN for layout classes and keyframes config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            keyframes: {
+              shine: {
+                '100%': { transform: 'translateX(150%)' }
+              }
+            },
+            animation: {
+              shine: 'shine 1.5s infinite'
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Hollywood Alternating Page Refresh Wave Logic -->
+    <script>
+      (function() {
+        var direction = sessionStorage.getItem('eduraWaveDirection');
+        var nextDirection = (!direction || direction === 'left-to-right') ? 'right-to-left' : 'left-to-right';
+        sessionStorage.setItem('eduraWaveDirection', nextDirection);
+        
+        document.addEventListener("DOMContentLoaded", function() {
+          var waveLayer = document.createElement('div');
+          waveLayer.className = 'hollywood-wave-layer wave-active-' + nextDirection;
+          
+          waveLayer.innerHTML = `
+            <!-- Saturated Cinematic Multicolored Aurora Background Blobs sweeping with the wave -->
+            <div class="wave-aurora-blob blob-cyan" style="position: absolute; width: 650px; height: 650px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 245, 255, 0.6) 0%, rgba(139, 92, 246, 0.4) 50%, transparent 75%); filter: blur(100px); pointer-events: none; z-index: 0; left: 150px; top: 10%; will-change: transform; transform: translate3d(0,0,0);"></div>
+            <div class="wave-aurora-blob blob-purple" style="position: absolute; width: 750px; height: 750px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 127, 0.5) 0%, rgba(139, 92, 246, 0.5) 50%, transparent 75%); filter: blur(120px); pointer-events: none; z-index: 0; left: 350px; top: 30%; will-change: transform; transform: translate3d(0,0,0);"></div>
+            
+            <!-- Glow Let's Continue Console Trigger -->
+            <div class="wave-continue-text">LET'S CONTINUE...</div>
+            
+            <svg class="wave-fluid-container" viewBox="0 0 1000 800" preserveAspectRatio="none" style="width: 100%; height: 100%; position: absolute; overflow: visible;">
+              <defs>
+                <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00f5ff" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="#00f5ff" stop-opacity="0.9"></stop>
+                  <stop offset="100%" stop-color="#00f5ff" stop-opacity="0"></stop>
+                </linearGradient>
+                <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff007f" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="#ff007f" stop-opacity="0.9"></stop>
+                  <stop offset="100%" stop-color="#ff007f" stop-opacity="0"></stop>
+                </linearGradient>
+                <linearGradient id="wave-grad-3" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ffea00" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="#ffea00" stop-opacity="0.9"></stop>
+                  <stop offset="100%" stop-color="#ffea00" stop-opacity="0"></stop>
+                </linearGradient>
+                <linearGradient id="wave-grad-4" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#9b51e0" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="#9b51e0" stop-opacity="0.9"></stop>
+                  <stop offset="100%" stop-color="#9b51e0" stop-opacity="0"></stop>
+                </linearGradient>
+                <linearGradient id="wave-grad-5" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ffaa00" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="#ffaa00" stop-opacity="0.9"></stop>
+                  <stop offset="100%" stop-color="#ffaa00" stop-opacity="0"></stop>
+                </linearGradient>
+                <filter id="wave-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur"></feGaussianBlur>
+                  <feMerge>
+                    <feMergeNode in="blur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                  </feMerge>
+                </filter>
+                <filter id="dot-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur"></feGaussianBlur>
+                  <feMerge>
+                    <feMergeNode in="blur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                  </feMerge>
+                </filter>
+              </defs>
+              <path id="p1" class="wave-path path-1" d="M -100,300 C 200,100 500,500 1100,300" fill="none" stroke="url(#wave-grad-1)" stroke-width="4" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,300 C 200,100 500,500 1100,300; M -100,300 C 200,500 500,100 1100,300; M -100,300 C 200,100 500,500 1100,300" dur="3s" repeatCount="indefinite" />
+              </path>
+              <circle r="7" fill="#ffffff" filter="url(#dot-glow)">
+                <animateMotion dur="1.3s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion>
+              </circle>
+              <path id="p2" class="wave-path path-2" d="M -100,450 C 300,600 600,200 1100,450" fill="none" stroke="url(#wave-grad-2)" stroke-width="3" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,450 C 300,600 600,200 1100,450; M -100,450 C 300,200 600,600 1100,450; M -100,450 C 300,600 600,200 1100,450" dur="2.8s" repeatCount="indefinite" />
+              </path>
+              <circle r="6" fill="#ff007f" filter="url(#dot-glow)">
+                <animateMotion dur="1.2s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion>
+              </circle>
+              <path id="p3" class="wave-path path-3" d="M -100,200 C 200,400 700,100 1100,200" fill="none" stroke="url(#wave-grad-3)" stroke-width="2.5" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,200 C 200,400 700,100 1100,200; M -100,200 C 200,100 700,400 1100,200; M -100,200 C 200,400 700,100 1100,200" dur="3.2s" repeatCount="indefinite" />
+              </path>
+              <circle r="5.5" fill="#ffea00" filter="url(#dot-glow)">
+                <animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion>
+              </circle>
+              <path id="p4" class="wave-path path-4" d="M -100,550 C 400,300 600,700 1100,550" fill="none" stroke="url(#wave-grad-4)" stroke-width="3" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,550 C 400,300 600,700 1100,550; M -100,550 C 400,700 600,300 1100,550; M -100,550 C 400,300 600,700 1100,550" dur="2.6s" repeatCount="indefinite" />
+              </path>
+              <circle r="6" fill="#a78bfa" filter="url(#dot-glow)">
+                <animateMotion dur="1.1s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion>
+              </circle>
+              <path id="p5" class="wave-path path-5" d="M -100,350 C 300,200 700,500 1100,350" fill="none" stroke="url(#wave-grad-5)" stroke-width="3.5" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,350 C 300,200 700,500 1100,350; M -100,350 C 300,500 700,200 1100,350; M -100,350 C 300,200 700,500 1100,350" dur="2.9s" repeatCount="indefinite" />
+              </path>
+              <circle r="6.5" fill="#ffa500" filter="url(#dot-glow)">
+                <animateMotion dur="1.3s" repeatCount="indefinite"><mpath href="#p5"/></animateMotion>
+              </circle>
+              <path id="p6" class="wave-path path-6" d="M -100,400 C 350,300 650,500 1100,400" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" filter="url(#wave-glow)">
+                <animate attributeName="d" values="M -100,400 C 350,300 650,500 1100,400; M -100,400 C 350,500 650,300 1100,400; M -100,400 C 350,300 650,500 1100,400" dur="2.4s" repeatCount="indefinite" />
+              </path>
+              <circle r="5" fill="#ffffff" filter="url(#dot-glow)">
+                <animateMotion dur="1.25s" repeatCount="indefinite"><mpath href="#p6"/></animateMotion>
+              </circle>
+            </svg>
+          `;
+          
+          document.body.appendChild(waveLayer);
+          
+          setTimeout(function() {
+            document.body.classList.remove('preloader-active');
+          }, 1100);
+
+          setTimeout(function() {
+            waveLayer.remove();
+          }, 1700);
+        });
+      })();
+    </script>
+
+    <script type="module" crossorigin src="./assets/index-B6nYguh_.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DmcOpNOK.css">
+  <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+  <body class="preloader-active bg-[#000000] text-[#F1F5F9] select-none">
+    <div id="root"></div>
+  </body>
+</html>

@@ -8,7 +8,7 @@ const mapBatchCompat = (batch) => {
   return {
     ...batch,
     _id: batch._id || batch.batch_id,
-    previewImage: batch.previewImage || batch.photo || "/images/hero-1.png",
+    previewImage: batch.previewImage || batch.photo || "/images/hero-2.png",
     feeTotal: 0
   };
 };
@@ -90,7 +90,7 @@ export const askStudyBuddy = async (query) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: `You are Saarthi, an expert AI Doubt Solver for EDURA WALLAH Ed-Tech platform. Answer this query in simple educational terms, highlighting key concepts: ${query}` }] }]
+          contents: [{ parts: [{ text: `You are Saarthi, an expert AI Doubt Solver for EDURA Ed-Tech platform. Answer this query in simple educational terms, highlighting key concepts: ${query}` }] }]
         })
       });
 

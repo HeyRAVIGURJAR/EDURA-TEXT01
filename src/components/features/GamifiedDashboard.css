@@ -375,7 +375,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .gamified-dashboard {
     padding: 1rem;
     padding-bottom: 5rem; /* space for bottom nav */
@@ -419,7 +419,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .dynamic-resume-bar {
     left: 1rem;
     right: 1rem;

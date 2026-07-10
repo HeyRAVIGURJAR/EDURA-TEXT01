@@ -77,7 +77,7 @@
 
 /* ── Like Button ─────────────────────────── */
 .pw-like-btn {
-  position: absolute;
+  position: absolute !important;
   top: 10px;
   right: 10px;
   background: rgba(0, 0, 0, 0.55);

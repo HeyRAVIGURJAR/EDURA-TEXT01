@@ -13,6 +13,7 @@ import ProgressiveImage from "../components/ui/ProgressiveImage";
 import StaggerContainer, { StaggerItem } from "../components/motion/StaggerReveal";
 import TiltCard from "../components/motion/TiltCard";
 import GhostGlowCard from '../components/ui/GhostGlowCard';
+import EduraLogo from '../components/ui/EduraLogo';
 import { useAuthStore } from '../store/useAuthStore';
 import './LandingPage.css';
 
@@ -42,6 +43,25 @@ const LandingPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveImageIndex((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
 
   const followerRef = useRef(null);
 
@@ -55,6 +75,14 @@ const LandingPage = () => {
     };
     const isTouch = checkTouch();
     setIsTouchDevice(isTouch);
+
+    // Check for performance/reduced motion
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReduceMotion(motionQuery.matches);
+    const handleMotionChange = (e) => setReduceMotion(e.matches);
+    if(motionQuery.addEventListener) {
+      motionQuery.addEventListener('change', handleMotionChange);
+    }
 
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -106,6 +134,9 @@ const LandingPage = () => {
         document.removeEventListener('mouseenter', onMouseEnter);
         cancelAnimationFrame(animationFrameId);
       }
+      if(motionQuery.removeEventListener) {
+        motionQuery.removeEventListener('change', handleMotionChange);
+      }
     };
   }, []);
 
@@ -146,7 +177,7 @@ const LandingPage = () => {
     {
       plan: 'The Pro',
       price: '99',
-      desc: 'Unlock the full EDURA WALLAH experience. No interruptions.',
+      desc: 'Unlock the full EDURA experience. No interruptions.',
       featured: true,
       badge: (
         <span className="flex items-center gap-2">
@@ -200,7 +231,7 @@ const LandingPage = () => {
   };
 
   const FAQS = [
-    { q: 'Is EDURA WALLAH free to use?', a: 'Yes! EDURA WALLAH offers a comprehensive free tier with access to community features, basic analytics, and free batches. Premium features are available with the Pro and Elite plans.' },
+    { q: 'Is EDURA free to use?', a: 'Yes! EDURA offers a comprehensive free tier with access to community features, basic analytics, and free batches. Premium features are available with the Pro and Elite plans.' },
     { q: 'How does the XP and league system work?', a: 'You earn XP for daily logins (50 XP), watching videos (120 XP), and attempting tests (250 XP). Streak multipliers give +25% XP per consecutive day. As you progress through five tiers: Beginner, Achiever, Scholar, Ranker, and Legend.' },
     { q: 'What is Saarthi AI?', a: 'Saarthi AI is your personal AI Doubt Solver that can explain any concept, solve doubts, and help you understand complex topics in simple language. Available 24/7 for Pro and Elite members.' },
   ];
@@ -222,10 +253,10 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="landing-page relative overflow-hidden bg-gradient-to-br from-black via-[#0a0514] to-black">
+    <div className="landing-page cinematic-glow-bg relative overflow-hidden bg-gradient-to-br from-black via-[#0a0514] to-black">
       {/* Astro Star Mouse Follower (Lag-free hardware accelerated) */}
-      {!isTouchDevice && (
-        <div ref={followerRef} className="astronomical-cursor-follower">
+      {!isTouchDevice && !reduceMotion && (
+        <div ref={followerRef} className="astronomical-cursor-follower hardware-accelerated">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 0L14.8 9.2L24 12L14.8 14.8L12 24L9.2 14.8L0 12L9.2 9.2L12 0Z" fill="url(#starGlowGrad)" />
             <defs>
@@ -238,8 +269,8 @@ const LandingPage = () => {
         </div>
       )}
 
-      {/* Interactive Particle Web Background - only on desktop for rendering speed */}
-      {!isTouchDevice && (
+      {/* Interactive Particle Web Background - disabled on low-end/reduced-motion devices */}
+      {!isTouchDevice && !reduceMotion && (
         <Particles
           id="tsparticles"
           init={particlesInit}
@@ -290,12 +321,7 @@ const LandingPage = () => {
         {/* Single line container with horizontal scroll on small screens */}
         <div className="flex items-center justify-between px-4 md:px-8 w-full max-w-[100vw] overflow-x-auto hide-scrollbar gap-6">
           <div className="nav-logo flex items-center gap-2 cursor-pointer flex-shrink-0" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <div className="pw-logo-circle w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black border-2 border-[#5B56E6] shadow-[0_0_10px_rgba(91,86,230,0.4)] text-sm tracking-tighter select-none">
-              EW
-            </div>
-            <span className="text-xl font-black tracking-tight text-white select-none">
-              EDURA<span className="text-[#5B56E6] ml-0.5">WALLAH</span>
-            </span>
+            <EduraLogo size={32} />
           </div>
           
           <div className="flex items-center gap-6 text-sm font-medium text-gray-300 flex-shrink-0 whitespace-nowrap">
@@ -317,17 +343,14 @@ const LandingPage = () => {
       {/* ---- HERO ---- */}
       <section className="hero-section" id="hero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', zIndex: 5 }}>
         <div className="hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyItems: 'center' }}>
-          
-          {/* Glowing floating logo */}
+          {/* Glowing floating logo with full text and parabolic curve */}
           <motion.div 
-            className="hero-logo-container-large"
+            className="hero-logo-container-large hardware-accelerated"
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ marginBottom: '1.5rem', width: '100px', height: '100px' }}
+            style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <div className="pw-logo-circle w-20 h-20 rounded-full bg-black text-white flex items-center justify-center font-black border-4 border-[#5B56E6] shadow-[0_0_20px_rgba(91,86,230,0.6)] text-2xl tracking-tighter select-none logo-floating-3d mx-auto">
-              EW
-            </div>
+            <EduraLogo size={100} showText={true} showUnderline={true} style={{ filter: 'drop-shadow(0 0 35px rgba(139, 92, 246, 0.35))' }} />
           </motion.div>
 
           <motion.div 
@@ -345,45 +368,10 @@ const LandingPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.15, margin: '1rem 0' }}
+            style={{ fontSize: '3.5rem', fontWeight: 900, lineHeight: 1.2, margin: '1rem 0', textAlign: 'center' }}
           >
-            India's Most Loved Educational Platform <br/>
-            <span className="relative inline-block mt-2">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#5B56E6] via-[#3B82F6] to-[#F59E0B] font-black tracking-tight hero-brand-text">EDURA WALLAH</span>
-              <span className="absolute left-1/2 bottom-[-15px] -translate-x-1/2 w-[110%] h-[16px] overflow-visible pointer-events-none block">
-                <svg className="w-full h-full overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  {/* Faint Background Guide Line */}
-                  <path 
-                    d="M 2,2 Q 50,10 98,2" 
-                    fill="none" 
-                    stroke="url(#heroRainbowGrad)" 
-                    strokeWidth="3.5" 
-                    strokeLinecap="round" 
-                    className="opacity-25"
-                  />
-                  {/* Dynamic Glowing Laser Beam */}
-                  <path 
-                    d="M 2,2 Q 50,10 98,2" 
-                    fill="none" 
-                    stroke="url(#heroRainbowGrad)" 
-                    strokeWidth="4" 
-                    strokeLinecap="round" 
-                    className="animate-flow-beam animate-rainbow-glow"
-                    strokeDasharray="35 65"
-                  />
-                  <defs>
-                    <linearGradient id="heroRainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ff007f" />
-                      <stop offset="20%" stopColor="#ff00ff" />
-                      <stop offset="40%" stopColor="#7f00ff" />
-                      <stop offset="60%" stopColor="#00f0ff" />
-                      <stop offset="80%" stopColor="#00ff7f" />
-                      <stop offset="100%" stopColor="#ffea00" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </span>
-            </span>
+            Educational Platform for <br/>
+            <span className="gradient-text">Next Gen Learners</span>
           </motion.h1>
 
           <motion.p 
@@ -453,26 +441,92 @@ const LandingPage = () => {
           </motion.div>
 
           {/* Floating Hero preview graphic */}
-          <motion.div 
-            className="hero-preview" 
-            style={{ marginTop: '3.5rem' }}
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <div className="hero-preview-images">
-              <div className="hero-image-container img-back">
-                <ProgressiveImage src="/images/hero-2.png" alt="Education" className="theme-matched-image" />
-              </div>
-              <div className="hero-image-container img-front">
-                <ProgressiveImage src="/images/hero-1.png" alt="Aspirant" className="theme-matched-image main-hero-img" />
-              </div>
-              <div className="hero-image-container img-side">
-                <ProgressiveImage src="/images/hero-3.png" alt="Growth" className="theme-matched-image" />
-              </div>
+          <div className="hero-preview primary-illustration-container hero-illustration-png" style={{ marginTop: '3.5rem' }}>
+            <div className="hero-preview-images" style={{ position: 'relative', height: '480px', width: '100%', maxWidth: '800px', margin: '0 auto', overflow: 'visible' }}>
+              {[1, 2, 3].map((num, idx) => {
+                const offset = (idx - activeImageIndex + 3) % 3;
+                let zIndex = 1;
+                let scale = 0.8;
+                let x = 120;
+                let rotate = 8;
+                let opacity = 0.6;
+                let filter = "blur(2px)";
+
+                if (offset === 0) {
+                  // Front Active Image
+                  zIndex = 3;
+                  scale = 1.12;
+                  x = 0;
+                  rotate = 0;
+                  opacity = 1;
+                  filter = "blur(0px)";
+                } else if (offset === 1) {
+                  // Right side image
+                  zIndex = 2;
+                  scale = 0.85;
+                  x = isMobile ? 80 : 220;
+                  rotate = 8;
+                  opacity = 0.7;
+                  filter = "blur(1.5px)";
+                } else {
+                  // Left side image
+                  zIndex = 1;
+                  scale = 0.85;
+                  x = isMobile ? -80 : -220;
+                  rotate = -8;
+                  opacity = 0.7;
+                  filter = "blur(1.5px)";
+                }
+
+                const cardWidth = isMobile ? 240 : 420;
+
+                return (
+                  <motion.div
+                    key={num}
+                    className={`hero-image-container ${offset === 0 ? 'hero-active-glow' : ''}`}
+                    whileHover={offset === 0 ? { scale: 1.16, rotate: 0.5, zIndex: 10 } : {}}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: `calc(50% - ${cardWidth / 2}px)`,
+                      width: `${cardWidth}px`,
+                      zIndex,
+                      filter
+                    }}
+                    animate={{
+                      scale,
+                      x,
+                      rotate,
+                      opacity,
+                      y: offset === 0 ? [-6, 6, -6] : 0
+                    }}
+                    transition={{
+                      scale: { type: 'spring', stiffness: 90, damping: 14, mass: 0.8 },
+                      x: { type: 'spring', stiffness: 90, damping: 14, mass: 0.8 },
+                      rotate: { type: 'spring', stiffness: 90, damping: 14, mass: 0.8 },
+                      opacity: { duration: 0.3 },
+                      y: offset === 0 ? {
+                        repeat: Infinity,
+                        repeatType: 'reverse',
+                        duration: 3,
+                        ease: 'easeInOut'
+                      } : { duration: 0.3 }
+                    }}
+                  >
+                    <ProgressiveImage 
+                      src={`/images/hero-${num}.png`} 
+                      alt={`Hero Preview ${num}`} 
+                      className="theme-matched-image main-hero-img rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.65)] border border-white/10" 
+                    />
+                  </motion.div>
+                );
+              })}
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
+
+      <div className="section-divider-flow" />
 
       {/* ---- FEATURES (RESPONSIVE GRID) ---- */}
       <section className="features-section py-24 relative z-10 max-w-7xl mx-auto px-6" id="features">
@@ -503,12 +557,15 @@ const LandingPage = () => {
                     strokeDasharray="25 75"
                   />
                   <defs>
-                    <linearGradient id="featuresRainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="featuresRainbowGrad" x1="0%" y1="0%" x2="100%" y2="0%" spreadMethod="repeat">
                       <stop offset="0%" stopColor="#ff007f" />
-                      <stop offset="25%" stopColor="#7f00ff" />
-                      <stop offset="50%" stopColor="#00f0ff" />
-                      <stop offset="75%" stopColor="#00ff7f" />
-                      <stop offset="100%" stopColor="#ffea00" />
+                      <stop offset="20%" stopColor="#7f00ff" />
+                      <stop offset="40%" stopColor="#00f0ff" />
+                      <stop offset="60%" stopColor="#00ff7f" />
+                      <stop offset="80%" stopColor="#ffea00" />
+                      <stop offset="100%" stopColor="#ff007f" />
+                      <animate attributeName="x1" values="0%;100%" dur="4s" repeatCount="indefinite" />
+                      <animate attributeName="x2" values="100%;200%" dur="4s" repeatCount="indefinite" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -529,7 +586,21 @@ const LandingPage = () => {
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 group-hover:text-purple-400 transition-all">
                     {f.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{f.title}</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">{f.title}</h3>
+                  
+                  {/* Sine Wave Animated White Line on Hover */}
+                  <div className="w-full h-[6px] overflow-hidden my-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <svg className="w-full h-full" viewBox="0 0 200 10" preserveAspectRatio="none">
+                      <path 
+                        d="M -80,5 Q -60,1 -40,5 T 0,5 T 40,5 T 80,5 T 120,5 T 160,5 T 200,5 T 240,5 T 280,5" 
+                        fill="none" 
+                        stroke="#ffffff" 
+                        strokeWidth="2.5" 
+                        className="sine-wave-flow"
+                      />
+                    </svg>
+                  </div>
+                  
                   <p className="text-gray-400 text-sm leading-relaxed flex-grow">{f.desc}</p>
                 </TiltCard>
               </GhostGlowCard>
@@ -537,6 +608,8 @@ const LandingPage = () => {
           ))}
         </StaggerContainer>
       </section>
+
+      <div className="section-divider-flow" />
 
       {/* ---- SHOWCASE LEAGUE ---- */}
       <section className="showcase-section py-24 relative z-10" id="showcase">
@@ -581,6 +654,8 @@ const LandingPage = () => {
         </motion.div>
       </section>
 
+      <div className="section-divider-flow" />
+
       {/* ---- TESTIMONIALS (STATIC GRID WITH HOVER EFFECTS) ---- */}
       <section className="testimonials-section relative z-10 py-24 px-6 max-w-7xl mx-auto" id="testimonials">
         <motion.div className="section-header fade-up text-center mb-16" {...revealProps}>
@@ -618,6 +693,8 @@ const LandingPage = () => {
         </StaggerContainer>
       </section>
 
+      <div className="section-divider-flow" />
+
       {/* ---- PRICING ---- */}
       <section className="pricing-section py-24 relative z-10" id="pricing">
         <motion.div className="section-header fade-up text-center mb-16" {...revealProps}>
@@ -654,6 +731,8 @@ const LandingPage = () => {
         </div>
       </section>
 
+      <div className="section-divider-flow" />
+
       {/* ---- FAQ ---- */}
       <section className="faq-section py-24 relative z-10" id="faq">
         <motion.div className="section-header fade-up text-center mb-16" {...revealProps}>
@@ -667,11 +746,13 @@ const LandingPage = () => {
         </motion.div>
       </section>
 
+      <div className="section-divider-flow" />
+
       {/* ---- CTA ---- */}
       <section className="cta-section">
         <motion.div className="cta-box" {...revealProps}>
           <h2>Ready to <span className="gradient-text">Transform</span> Your Learning?</h2>
-          <p>Join thousands of students who are already learning smarter with EDURA WALLAH.</p>
+          <p>Join thousands of students who are already learning smarter with EDURA.</p>
           <div className="cta-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
             <GlowButton onClick={handleConsoleRedirect}>
               Start Learning Free →
@@ -681,11 +762,25 @@ const LandingPage = () => {
         </motion.div>
       </section>
 
+      {/* Stitch AI Inspired Ambient Aurora Glow */}
+      <div className="absolute inset-x-0 bottom-0 top-[40%] overflow-hidden pointer-events-none z-[1]">
+        <div className="aurora-glow-container">
+          <div className="aurora-blob aurora-cyan animate-pulse" />
+          <div className="aurora-blob aurora-violet" />
+          <div className="aurora-blob aurora-emerald animate-pulse" />
+        </div>
+      </div>
+
+      {/* Heavy Bottom Stitch AI Aurora Glow Overlay & Side Ambient Auroras */}
+      <div className="bottom-stitch-aurora" />
+      <div className="side-aurora-left" />
+      <div className="side-aurora-right" />
+
       {/* ---- FOOTER ---- */}
       <footer className="landing-footer">
         <div className="footer-content">
-          <div className="footer-logo font-black text-xl tracking-tight text-white">
-            EDURA<span className="text-[#5B56E6] ml-0.5">WALLAH</span>
+          <div className="footer-logo">
+            <EduraLogo size={28} />
           </div>
           <div className="footer-links">
             <h4>Legal</h4>
@@ -693,7 +788,7 @@ const LandingPage = () => {
             <Link to="/privacy-policy">Privacy Policy</Link>
             <a href="#">Refund Policy</a>
           </div>
-          <div className="footer-copy">© 2026 EDURA WALLAH. All rights reserved.</div>
+          <div className="footer-copy">© 2026 EDURA. All rights reserved.</div>
         </div>
       </footer>
 
@@ -713,7 +808,7 @@ const LandingPage = () => {
                 className="w-16 h-16 border-4 border-t-[#5B56E6] border-r-[#F59E0B] border-b-transparent border-l-transparent rounded-full mx-auto mb-6 shadow-[0_0_20px_rgba(91,86,230,0.5)]"
               />
               <h2 className="text-3xl font-black text-white mb-2 tracking-tighter">Waking up the Servers...</h2>
-              <p className="text-gray-400 font-medium">Redirecting to your EW Console...</p>
+              <p className="text-gray-400 font-medium">Redirecting to your EDURA Console...</p>
             </div>
           </motion.div>
         )}

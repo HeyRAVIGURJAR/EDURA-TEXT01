@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import EduraLogo from '../components/ui/EduraLogo';
 import './LeaderboardPage.css';
 
 const MOCK_LEADERS = [
@@ -42,9 +43,7 @@ const LeaderboardPage = () => {
 
       <div className="lead-header-row">
         <div>
-          <h1 className="lead-title">
-            <Trophy className="lead-title-icon" /> Aspirants Leaderboard
-          </h1>
+          <EduraLogo size={42} subview="LEADERBOARD" />
           <p className="lead-subtitle">Compete globally with India's top JEE/NEET scholars.</p>
         </div>
         

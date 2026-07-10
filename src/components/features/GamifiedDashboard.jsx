@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Flame, Crown, Target, Map, Sparkles, Brain, Play } from 'lucide-react';
+import { Flame, Crown, Target, Map, Sparkles, Brain, Play, Coins } from 'lucide-react';
 import AspirantInsight from './AspirantInsight';
 import './GamifiedDashboard.css';
 
@@ -11,7 +11,7 @@ const GamifiedDashboard = () => {
   const { user, currentStreak, totalXP, isFrozen, freezeStreak } = useAuthStore();
   const [questionsToday] = useState(42);
   const [questionsGoal] = useState(50);
-  const [lecturesWatched] = useState(2);
+  const [lecturesWatched] = useState(0);
   const currentCoins = user?.coins || 0;
   const goalPercent = Math.min(100, Math.round((questionsToday / questionsGoal) * 100));
 
@@ -32,6 +32,29 @@ const GamifiedDashboard = () => {
     }
     freezeStreak();
   };
+
+  // 🎉 Fire confetti on active streak >= 1 (once per session)
+  useEffect(() => {
+    if (currentStreak >= 1 && !isFrozen) {
+      const alreadyFired = sessionStorage.getItem('edura_streak_confetti');
+      if (!alreadyFired) {
+        sessionStorage.setItem('edura_streak_confetti', 'true');
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('edura-confetti'));
+        }, 800);
+      }
+    }
+  }, [currentStreak, isFrozen]);
+
+  // 👋 Show personalized welcome modal on first login
+  useEffect(() => {
+    const welcomed = localStorage.getItem('edura_welcomed');
+    if (!welcomed) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('edura-welcome', { detail: { name: user?.name || user?.username || 'Aspirant' } }));
+      }, 1200);
+    }
+  }, [user]);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -67,8 +90,10 @@ const GamifiedDashboard = () => {
           <p className="text-sm font-light text-gray-400">Current Study Streak</p>
           
           {/* Hover Freeze Action */}
-          <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform bg-[#18181b] border-t border-white/10 flex justify-between items-center">
-            <span className="text-sm font-bold text-yellow-500">{currentCoins} 🪙</span>
+          <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform bg-[#18181b]/90 backdrop-blur-md border-t border-white/10 flex justify-between items-center">
+            <span className="text-sm font-bold text-yellow-500 flex items-center gap-1" style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.4))' }}>
+              {currentCoins} <Coins size={16} className="text-yellow-400" />
+            </span>
             <button onClick={handleFreeze} className="px-3 py-1 bg-blue-600/20 text-blue-400 text-xs font-bold rounded hover:bg-blue-600/40 transition-colors">
               Freeze (50)
             </button>
@@ -115,24 +140,7 @@ const GamifiedDashboard = () => {
           </div>
         </motion.div>
 
-        {/* 4. AI CATCH-UP PLAN (Col Span 2) */}
-        <motion.div variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-1 md:col-span-2 bg-gradient-to-br from-[#1A1A24] to-[#0A0A0B] rounded-3xl p-8 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.05)] relative overflow-hidden group">
-          <div className="absolute top-4 right-4 bg-purple-600/20 border border-purple-500/30 text-purple-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">AI Suggested</div>
-          <h3 className="text-xl font-bold mb-3 flex items-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-            <Brain className="text-purple-400" /> Catch-up Plan
-          </h3>
-          <p className="font-light text-gray-400 text-sm mb-6 leading-relaxed pr-10">
-            Falling behind in <strong className="text-orange-400 font-medium">Organic Chemistry</strong>. Your peers are at 65%. Let's close the gap.
-          </p>
-          <div className="flex gap-4">
-            <button className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-medium transition-colors border border-white/10">
-              Watch 1-Shot (45m)
-            </button>
-            <button className="flex-1 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(147,51,234,0.3)]">
-              Solve DPP
-            </button>
-          </div>
-        </motion.div>
+
 
         {/* 5. ASPIRANT ROADMAP (Col Span 2, Row Span 2) */}
         <motion.div variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-1 md:col-span-2 row-span-2 bg-[#121212] rounded-3xl p-8 border border-white/5 relative overflow-hidden group">
@@ -178,34 +186,7 @@ const GamifiedDashboard = () => {
 
       </div>
 
-      {/* Dynamic Bottom Resume Lecture Bar */}
-      <AnimatePresence>
-        {lastLecture && (
-          <motion.div 
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="dynamic-resume-bar"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#8B5CF6]/20 flex items-center justify-center text-[#8B5CF6]">
-                <Play size={18} fill="currentColor" />
-              </div>
-              <div>
-                <p className="text-xs text-[#a78bfa] font-bold uppercase tracking-wider">In Progress Lecture</p>
-                <h4 className="text-sm font-bold text-white leading-normal">{lastLecture.title}</h4>
-                <p className="text-[11px] text-gray-400 leading-normal">{lastLecture.batchName} • {lastLecture.tutor}</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => navigate(`/dashboard/batch/${lastLecture.batchId}?play=${lastLecture.id}`)}
-              className="px-4 py-2 bg-gradient-to-r from-[#8B5CF6] to-[#06B6D4] hover:scale-[1.03] text-white text-xs font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(138,43,226,0.25)]"
-            >
-              Resume Now
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 };

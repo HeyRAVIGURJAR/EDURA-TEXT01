@@ -10,6 +10,7 @@ import { useNotificationStore } from '../store/useNotificationStore';
 import { sanitizeInput } from '../utils/sanitize';
 import { loginSchema, signupSchema, getPasswordStrength } from '../utils/validate';
 import GlowButton from '../components/GlowButton';
+import EduraLogo from '../components/ui/EduraLogo';
 import './AuthPage.css';
 
 // --- Rate Limiting Constants ---
@@ -269,25 +270,14 @@ const AuthPage = () => {
 
           {/* Logo */}
           <motion.div
-            className="auth-logo"
+            className="auth-logo flex flex-col items-center justify-center"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            <img
-              src="/images/edura-logo-new.png"
-              alt="EDURA"
-              className="auth-logo-img"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-            <div className="auth-logo-fallback" style={{ display: 'none' }}>
-              <span>E</span>
-            </div>
-            <h1 className="auth-brand">EDURA</h1>
-            <p className="auth-tagline">AI-Powered Education Platform</p>
+            <EduraLogo size={48} showText={true} />
+            <p className="auth-tagline" style={{ marginTop: '0.5rem' }}>AI-Powered Education Platform</p>
           </motion.div>
 
           {/* Auth Form */}

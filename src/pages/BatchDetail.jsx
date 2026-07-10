@@ -9,7 +9,7 @@ import {
   Bookmark, Share2, Eye, Flame, Trash2, Edit2, Plus, Volume2
 } from 'lucide-react';
 import { fetchBatches, fetchDppQuiz, fetchDppSolutionVideo } from '../services/api';
-import EduraPreloader from '../components/ui/EduraPreloader';
+import { BatchDetailSkeleton } from '../components/ui/SkeletonLoader';
 import { useNotificationStore } from '../store/useNotificationStore';
 import PdfViewer from '../components/features/PdfViewer';
 import './BatchDetail.css';
@@ -31,11 +31,11 @@ const MOCK_LECTURES = [
   { id: 'vid5', num: '05', title: 'Ray Optics 05 : Refraction at Spherical Surfaces', duration: '1h 30m', tutor: 'Alakh Sir', locked: true, url: null, views: '98K', difficulty: 'Hard', watchProgress: 0, completed: false },
 ];
 
-const MOCK_DPPS = [
-  { id: 'dpp1', num: '01', title: 'DPP 01 — Ray Optics Fundamentals MCQ', questions: 15, difficulty: 'Easy', locked: false, solved: true },
-  { id: 'dpp2', num: '02', title: 'DPP 02 — Mirror Formula & Spherical Mirrors', questions: 10, difficulty: 'Medium', locked: false, solved: false },
-  { id: 'dpp3', num: '03', title: 'DPP 03 — Snell\'s Law and Apparent Depth', questions: 20, difficulty: 'Hard', locked: true, solved: false },
-  { id: 'dpp4', num: '04', title: 'DPP 04 — TIR & Critical Angle Numericals', questions: 12, difficulty: 'Medium', locked: true, solved: false },
+const MOCK_PYQS = [
+  { id: 'pyq1', num: '01', title: 'JEE Advanced Physics Paper 1 (2025)', questions: 18, difficulty: 'Hard', locked: false, solved: true },
+  { id: 'pyq2', num: '02', title: 'JEE Advanced Physics Paper 2 (2024)', questions: 18, difficulty: 'Hard', locked: false, solved: false },
+  { id: 'pyq3', num: '03', title: 'JEE Main Physics Shift 1 (2025)', questions: 30, difficulty: 'Medium', locked: false, solved: false },
+  { id: 'pyq4', num: '04', title: 'NEET Physics Past Year Paper (2025)', questions: 45, difficulty: 'Medium', locked: true, solved: false },
 ];
 
 const MOCK_NOTES = [
@@ -78,7 +78,7 @@ const SUBJECT_CHIPS = [
 const BATCH_TABS = [
   { id: 'lectures', label: 'Lectures', count: MOCK_LECTURES.length },
   { id: 'notes', label: 'Class Notes', count: MOCK_NOTES.length },
-  { id: 'dpp', label: 'DPPs & Solutions', count: MOCK_DPPS.length },
+  { id: 'practice', label: 'Practice & PYQs', count: MOCK_PYQS.length },
   { id: 'quiz', label: 'Live Test Series', count: MOCK_QUIZ.length },
   { id: 'roadmap', label: 'Syllabus', count: MOCK_CHAPTERS.length },
   { id: 'revision', label: 'Revision Hub', count: 1 },
@@ -466,8 +466,8 @@ const LiveDppQuizPanel = () => {
   return (
     <div className="test-banner-card glass-panel" style={{ background: 'linear-gradient(135deg, rgba(91, 86, 230, 0.08) 0%, rgba(6, 182, 212, 0.03) 100%)', padding: '1.5rem', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.5rem', border: '1px solid rgba(255,255,255,0.06)' }}>
       <div className="banner-badge" style={{ background: 'var(--color-accent)', color: '#000', fontSize: '0.6rem', fontWeight: 800, width: 'max-content', padding: '2px 6px', borderRadius: '4px' }}>LIVE API EXAM</div>
-      <h3 style={{ margin: '0.2rem 0 0.1rem 0', fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.1rem', color: '#fff' }}>Official BrainBox DPP Live Quiz</h3>
-      <p style={{ margin: 0, fontSize: '0.78rem', color: '#94a3b8', lineHeight: 1.4 }}>Attempt the live objective quiz fetched directly from official PW endpoints with step solution videos.</p>
+      <h3 style={{ margin: '0.2rem 0 0.1rem 0', fontFamily: 'Outfit', fontWeight: 800, fontSize: '1.1rem', color: '#fff' }}>Official BrainBox Practice Live Quiz</h3>
+      <p style={{ margin: 0, fontSize: '0.78rem', color: '#94a3b8', lineHeight: 1.4 }}>Attempt the live objective practice quiz fetched directly from official PW endpoints with step solution videos.</p>
       <button className="start-test-btn" style={{
         marginTop: '0.8rem',
         display: 'flex',
@@ -483,7 +483,7 @@ const LiveDppQuizPanel = () => {
         cursor: 'pointer',
         width: 'max-content'
       }} onClick={startQuiz}>
-        Start DPP Quiz Challenge <ChevronRight size={14} />
+        Start Practice Quiz Challenge <ChevronRight size={14} />
       </button>
     </div>
   );
@@ -618,7 +618,7 @@ const BatchDetail = () => {
       setBatch(matched || {
         _id: batchId,
         name: 'Lakshya JEE/NEET 2027 Ultimate',
-        byName: 'Alakh Pandey Sir & team',
+        byName: 'Top IITian & Doctor Mentors',
         previewImage: null,
         feeTotal: 2499,
       });
@@ -661,7 +661,7 @@ const BatchDetail = () => {
     localStorage.setItem(`edura_notes_${batchId}`, val);
   };
 
-  if (loading) return <EduraPreloader message="Opening your classroom..." />;
+  if (loading) return <BatchDetailSkeleton />;
 
   const price = batch?.feeTotal ?? batch?.amount ?? 0;
   const isFree = !price || price === 0;
@@ -679,7 +679,7 @@ const BatchDetail = () => {
       {/* ── Cinematic Netflix Banner ── */}
       <div className="bd-hero glass-panel">
         <div className="bd-hero-img-wrap">
-          <img src={batch?.previewImage || "/images/hero-1.png"} alt={batch?.name} className="bd-hero-img" />
+          <img src={batch?.previewImage || "/images/hero-2.png"} alt={batch?.name} className="bd-hero-img" />
           <div className="bd-hero-img-overlay" />
         </div>
         <div className="bd-hero-body">
@@ -712,13 +712,13 @@ const BatchDetail = () => {
           </div>
 
           <div className="bd-hero-actions">
-            <button className="bd-primary-btn" onClick={() => handlePlayVideo(MOCK_LECTURES[0])}>
+            <button className="bd-primary-btn" onClick={() => alert('Our educators are preparing the first live lectures. We will notify you as soon as they are uploaded! 🔔')}>
               <Play size={16} fill="currentColor" />
-              <span>Continue Learning</span>
+              <span>Coming Soon</span>
             </button>
-            <button className="bd-outline-btn">
+            <button className="bd-outline-btn" onClick={() => alert('Class notes and DPP solutions will be available shortly!')}>
               <Download size={15} />
-              <span>Download Batch</span>
+              <span>Download Notes</span>
             </button>
           </div>
         </div>
@@ -736,19 +736,7 @@ const BatchDetail = () => {
         </div>
       </div>
 
-      {/* ── AI Coach Prompt ── */}
-      <div className="ai-coach-banner glass-panel">
-        <div className="ai-coach-avatar">
-          <BrainCircuit size={22} />
-        </div>
-        <div className="ai-coach-content">
-          <h4>Good Evening, Ravi 👋</h4>
-          <p>Today's study target: <strong>2 Lectures</strong>, <strong>50 DPP questions</strong>, and <strong>1 physics revision session</strong>. Estimated time: <strong>3h 20m</strong>.</p>
-        </div>
-        <button className="ai-coach-start-btn" onClick={() => handlePlayVideo(MOCK_LECTURES[1])}>
-          Start Session <ChevronRight size={14} />
-        </button>
-      </div>
+
 
       {/* ── Focus Music Player Widget ── */}
       <FocusMusicPlayer />
@@ -763,10 +751,7 @@ const BatchDetail = () => {
                 <h4>{selectedVideo.title}</h4>
               </div>
               <div className="bd-player-controls-right">
-                <button className="bd-player-ai-btn" onClick={() => navigate('/dashboard/ai-buddy')}>
-                  <Sparkles size={13} />
-                  <span>Ask AI</span>
-                </button>
+
                 <button className="bd-player-close-btn" onClick={() => setSelectedVideo(null)}><X size={16} /></button>
               </div>
             </div>
@@ -894,167 +879,99 @@ const BatchDetail = () => {
 
       {/* ── Tab Content Area ── */}
       <AnimatePresence mode="wait">
-        {activeTab === 'lectures' && (
-          <motion.div key="lectures" className="bd-lectures-grid-custom" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            {MOCK_LECTURES.map((lec) => (
-              <div key={lec.id} className={`netflix-lec-card glass-panel ${lec.locked ? 'locked' : ''}`} onClick={() => !lec.locked && openBottomSheet(lec)}>
-                <div className="netflix-thumb-wrap">
-                  <img src="/images/hero-1.png" alt={lec.title} className="netflix-thumb" />
-                  {lec.watchProgress > 0 && (
-                    <div className="netflix-progress-bar-track">
-                      <div className="netflix-progress-bar-fill" style={{ width: `${lec.watchProgress}%` }} />
-                    </div>
-                  )}
-                  {lec.locked ? (
-                    <div className="netflix-lock-overlay"><Lock size={20} /></div>
-                  ) : (
-                    <div className="netflix-play-hover"><Play size={24} fill="white" /></div>
-                  )}
-                  {lec.badge && <span className="netflix-badge">{lec.badge}</span>}
-                </div>
-                <div className="netflix-info">
-                  <div className="netflix-title-row">
-                    <h5>Lec {lec.num}: {lec.title}</h5>
-                  </div>
-                  <div className="netflix-meta">
-                    <span>{lec.duration}</span>
-                    <span className="dot">·</span>
-                    <span>{lec.views} views</span>
-                    <span className="dot">·</span>
-                    <span className="tutor-lbl">By {lec.tutor}</span>
-                  </div>
-                  <div className="netflix-footer-row">
-                    <DiffBadge level={lec.difficulty} />
-                    {lec.watchProgress > 0 && <span className="netflix-progress-txt">{lec.watchProgress}% watched</span>}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
+        <motion.div
+          key={activeTab}
+          className="bd-coming-soon-panel glass-panel"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            padding: '4rem 2rem',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1.5rem',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.05)',
+            background: 'rgba(10, 10, 11, 0.4)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            marginTop: '1.5rem',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Neon Light Background Blob */}
+          <div style={{
+            position: 'absolute',
+            top: '-50px',
+            right: '-50px',
+            width: '180px',
+            height: '180px',
+            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+            pointerEvents: 'none'
+          }} />
 
-        {activeTab === 'roadmap' && (
-          <motion.div key="roadmap" className="bd-timeline" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            {MOCK_CHAPTERS.map((ch, idx) => (
-              <div key={ch.id} className={`timeline-node ${ch.status}`}>
-                <div className="timeline-left">
-                  <div className={`timeline-circle ${ch.status === 'completed' ? 'active' : ch.status === 'current' ? 'pulse' : ''}`}>
-                    {ch.status === 'completed' ? <CheckCircle size={14} /> : idx + 1}
-                  </div>
-                  {idx < MOCK_CHAPTERS.length - 1 && <div className="timeline-line" />}
-                </div>
-                <div className="timeline-right">
-                  <h5>{ch.title}</h5>
-                  <div className="timeline-meta">
-                    <span>{ch.lecturesCount} Lectures</span>
-                    <span className="dot">·</span>
-                    <span className={`timeline-status-badge ${ch.status}`}>{ch.status}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
+          {/* Animated Icon */}
+          <div 
+            className="stitch-border" 
+            style={{ 
+              width: '72px', 
+              height: '72px', 
+              borderRadius: '50%', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              background: '#0a0a0c',
+              '--stitch-bg': '#0a0a0c',
+              boxShadow: '0 0 20px rgba(139, 92, 246, 0.2)'
+            }}
+          >
+            <Sparkles size={28} className="text-purple-400 animate-pulse" />
+          </div>
 
-        {activeTab === 'dpp' && (
-          <motion.div key="dpp" className="bd-list" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <LiveDppQuizPanel />
-            
-            <div className="dpp-stats-row glass-panel" style={{ marginTop: '1.25rem' }}>
-              <div className="dpp-stat">
-                <span className="dpp-stat-val">1/4</span>
-                <span className="dpp-stat-lbl">DPPs Solved</span>
-              </div>
-              <div className="dpp-stat">
-                <span className="dpp-stat-val">91%</span>
-                <span className="dpp-stat-lbl">Accuracy</span>
-              </div>
-              <div className="dpp-stat">
-                <span className="dpp-stat-val">1m 22s</span>
-                <span className="dpp-stat-lbl">Avg Time / Q</span>
-              </div>
-            </div>
-            {MOCK_DPPS.map((dpp) => (
-              <div key={dpp.id} className="bd-resource-row glass-panel">
-                <div className="bd-resource-icon dpp">
-                  <HelpCircle size={18} />
-                </div>
-                <div className="bd-resource-info">
-                  <h5>{dpp.title}</h5>
-                  <div className="bd-resource-meta">
-                    <span>{dpp.questions} Questions</span>
-                    <span className="dot">·</span>
-                    <DiffBadge level={dpp.difficulty} />
-                  </div>
-                </div>
-                <button className={`bd-dl-btn ${dpp.locked ? 'locked' : ''}`} onClick={() => dpp.locked ? alert('Enroll to unlock DPPs') : alert(`Downloading DPP ${dpp.num}`)}>
-                  {dpp.locked ? <Lock size={13} /> : <Download size={13} />}
-                  <span>{dpp.locked ? 'Locked' : 'Download'}</span>
-                </button>
-              </div>
-            ))}
-          </motion.div>
-        )}
+          <div>
+            <span style={{
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              color: '#a78bfa',
+              display: 'inline-block',
+              marginBottom: '0.5rem'
+            }}>
+              {activeTab === 'lectures' && 'Video Lectures'}
+              {activeTab === 'notes' && 'Class Notes & Notebooks'}
+              {activeTab === 'practice' && 'Practice Sheets & DPPs'}
+              {activeTab === 'quiz' && 'Live Test Series'}
+              {activeTab === 'roadmap' && 'Syllabus Roadmap'}
+              {activeTab === 'revision' && 'Revision Center'}
+            </span>
+            <h2 className="text-3xl font-black text-white tracking-tight" style={{ margin: 0 }}>COMING SOON</h2>
+          </div>
 
-        {activeTab === 'notes' && (
-          <motion.div key="notes" className="bd-list" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            {/* Notes Section with Teacher notes and Handwritten notebook option */}
-            <div className="notes-mode-split">
-              <div className="notes-left">
-                <h4 className="notes-sub-header">Teacher Notes & Formula Sheets</h4>
-                {MOCK_NOTES.map((note) => (
-                  <div key={note.id} className="bd-resource-row glass-panel">
-                    <div className="bd-resource-icon notes">
-                      <FileText size={18} />
-                    </div>
-                    <div className="bd-resource-info">
-                      <h5>{note.title}</h5>
-                      <div className="bd-resource-meta">
-                        <span>{note.pages} Pages</span>
-                        <span className="dot">·</span>
-                        <span>{note.size}</span>
-                      </div>
-                    </div>
-                    <button className={`bd-dl-btn notes ${note.locked ? 'locked' : ''}`} onClick={() => note.locked ? alert('Enroll to unlock notes') : setActivePdf(note)}>
-                      {note.locked ? <Lock size={13} /> : <BookOpen size={13} />}
-                      <span>{note.locked ? 'Locked' : 'Read'}</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="notes-right glass-panel">
-                <h4 className="notes-sub-header"><Edit2 size={13} /> My Handwritten Notebook</h4>
-                <textarea className="handwritten-notebook" placeholder="Type your personal class notes, key formulas, questions to ask etc. saved automatically." value={personalNotes} onChange={e => savePersonalNotes(e.target.value)} />
-                <span className="notebook-saved-hint">Saved to Local Storage</span>
-              </div>
-            </div>
-          </motion.div>
-        )}
+          <p style={{
+            color: '#94a3b8',
+            fontSize: '0.95rem',
+            maxWidth: '480px',
+            lineHeight: '1.6',
+            fontWeight: 300,
+            margin: 0
+          }}>
+            Our top-tier IITian & Doctor educators are crafting premium, high-yield study materials for this batch. Everything will be unlocked soon!
+          </p>
 
-        {activeTab === 'quiz' && (
-          <motion.div key="quiz" className="bd-quiz-panel glass-panel" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="bd-quiz-header">
-              <Zap size={18} style={{ color: 'var(--color-primary)' }} />
-              <h3>Weekly Practice Quiz</h3>
-              <span>{MOCK_QUIZ.length} Questions</span>
-            </div>
-            <QuizPanel />
-          </motion.div>
-        )}
-
-        {activeTab === 'revision' && (
-          <motion.div key="revision" className="bd-revision-center" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="revision-hero glass-panel">
-              <Award size={36} className="rev-icon" />
-              <h3>EW Revision Center</h3>
-              <p>Generate instant mind maps, cheat sheets, or trigger flashcards for Ray Optics.</p>
-              <div className="revision-actions">
-                <button className="rev-action-btn" onClick={() => alert('Generating Mind Map...')}><BrainCircuit size={15} /> Formula Sheet</button>
-                <button className="rev-action-btn" onClick={() => alert('Generating Flashcards...')}><Sparkles size={15} /> Flashcards</button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+          {/* Custom micro interaction button */}
+          <button 
+            className="stitch-border px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all"
+            style={{ '--stitch-bg': '#0f172a', marginTop: '0.5rem' }}
+            onClick={() => alert('We will notify you as soon as this section is uploaded! 🔔')}
+          >
+            Get Notified 🔔
+          </button>
+        </motion.div>
       </AnimatePresence>
 
       {/* PDF Viewer Modal */}

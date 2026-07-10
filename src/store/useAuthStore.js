@@ -90,12 +90,23 @@ const persistUsers = (users) => {
   localStorage.setItem(MOCK_USERS_DB_KEY, JSON.stringify(users));
 };
 
-export const useAuthStore = create((set, get) => ({
-  user: null,
-  isAuthenticated: false,
-  isAdmin: false,
-  users: getInitialUsers(),
-  loginError: null,
+export const useAuthStore = create((set, get) => {
+  const users = getInitialUsers();
+  const defaultStudent = users.find(u => u.role === 'student' && !u.blocked) || users[1];
+  const initialUser = {
+    ...defaultStudent,
+    xp: defaultStudent.xp || 560,
+    coins: defaultStudent.coins || 120,
+    streak: defaultStudent.streak || 7,
+    streakFrozen: defaultStudent.streakFrozen || false
+  };
+
+  return {
+    user: initialUser,
+    isAuthenticated: true,
+    isAdmin: false,
+    users,
+    loginError: null,
   
   // Global Audio State
   globalAudioUrl: null,
@@ -247,4 +258,5 @@ export const useAuthStore = create((set, get) => ({
   },
 
   getAllUsers: () => get().users.filter((u) => u.role !== 'admin'),
-}));
+  };
+});

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BadgeCheck, Send, Rocket, Flame, MessageSquare, 
-  ThumbsUp, Share2, Plus, X, Globe, Sparkles 
+  ThumbsUp, Share2, Plus, X, Globe, Sparkles,
+  Bell, BellOff, Info, AlertTriangle, CheckCircle, Radio, Trash2, Clock
 } from 'lucide-react';
 import { useNotificationStore } from '../store/useNotificationStore';
 import { useAuthStore } from '../store/useAuthStore';
@@ -52,21 +53,21 @@ const INITIAL_DOUBTS = [
     id: 'd-2',
     sender: 'Sonia_NEET',
     date: '2 hours ago',
-    title: 'Is HC Verma Volume 2 necessary for NEET Organic chemistry?',
-    content: 'Do we need to solve numericals from volume 2 for general organic chemistry or NCERT Exemplar is sufficient?',
+    title: 'Is MS Chouhan necessary for NEET Organic chemistry?',
+    content: 'Do we need to solve questions from MS Chouhan for general organic chemistry or NCERT is sufficient?',
     likes: 8,
     liked: false,
     comments: [
-      { sender: 'Aman_NEET', text: 'HC Verma is only for Physics, use MS Chouhan for Organic Chemistry!' }
+      { sender: 'Aman_NEET', text: 'MS Chouhan has good advanced level questions, but NCERT is sufficient for NEET chemistry!' }
     ]
   }
 ];
 
 const CommunityFeed = () => {
-  const addNotification = useNotificationStore(s => s.addNotification);
+  const { notifications, dismissNotification, clearAll, addNotification } = useNotificationStore();
   const { user } = useAuthStore();
 
-  const [activeTab, setActiveTab] = useState('announcements'); // announcements | doubts
+  const [activeTab, setActiveTab] = useState('announcements'); // announcements | doubts | notifications
   const [announcements, setAnnouncements] = useState(INITIAL_ANNOUNCEMENTS);
   const [doubts, setDoubts] = useState(INITIAL_DOUBTS);
 
@@ -79,7 +80,7 @@ const CommunityFeed = () => {
   const [activeCommentPostId, setActiveCommentPostId] = useState(null);
   const [commentInput, setCommentInput] = useState('');
 
-  const activePosts = activeTab === 'announcements' ? announcements : doubts;
+  const activePosts = activeTab === 'announcements' ? announcements : (activeTab === 'doubts' ? doubts : []);
 
   const handleLikePost = (id) => {
     const updateLikes = (list) => 
@@ -177,6 +178,9 @@ const CommunityFeed = () => {
           <button className={`feed-tab-btn ${activeTab === 'doubts' ? 'active' : ''}`} onClick={() => setActiveTab('doubts')}>
             💬 Aspirant Doubts
           </button>
+          <button className={`feed-tab-btn ${activeTab === 'notifications' ? 'active' : ''}`} onClick={() => setActiveTab('notifications')}>
+            🔔 Activity & Alerts
+          </button>
         </div>
         
         {activeTab === 'doubts' && (
@@ -184,88 +188,137 @@ const CommunityFeed = () => {
             <Plus size={14} /> Ask Doubt
           </button>
         )}
+
+        {activeTab === 'notifications' && notifications.length > 0 && (
+          <button className="create-doubt-btn" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)' }} onClick={clearAll}>
+            Clear All Alerts
+          </button>
+        )}
       </div>
 
       {/* Posts list */}
       <div className="posts-container">
-        {activePosts.map(post => (
-          <div key={post.id} className="post-card glass-panel">
-            <div className="post-header">
-              <div className="post-avatar">
-                {activeTab === 'announcements' ? (
-                  <img src="/images/edura-logo-new.png" alt="Admin" onError={(e) => { e.target.src = '/logo.jpg'; e.target.onerror = () => e.target.style.display='none'; }} />
-                ) : (
-                  <div className="user-text-avatar">{post.sender.substring(0, 2).toUpperCase()}</div>
-                )}
-              </div>
-              <div className="post-author-info">
-                <div className="flex items-center gap-2">
-                  <h3 className="post-author-name">{post.sender || post.admin}</h3>
-                  {activeTab === 'announcements' && <BadgeCheck className="w-4 h-4 text-blue-500 fill-blue-500/20" />}
+        {activeTab !== 'notifications' ? (
+          activePosts.map(post => (
+            <div key={post.id} className="post-card glass-panel">
+              <div className="post-header">
+                <div className="post-avatar">
+                  {activeTab === 'announcements' ? (
+                    <img src="/images/edura-logo-new.png" alt="Admin" onError={(e) => { e.target.src = '/logo.jpg'; e.target.onerror = () => e.target.style.display='none'; }} />
+                  ) : (
+                    <div className="user-text-avatar">{post.sender.substring(0, 2).toUpperCase()}</div>
+                  )}
                 </div>
-                <span className="post-date">{post.date}</span>
+                <div className="post-author-info">
+                  <div className="flex items-center gap-2">
+                    <h3 className="post-author-name">{post.sender || post.admin}</h3>
+                    {activeTab === 'announcements' && <BadgeCheck className="w-4 h-4 text-blue-500 fill-blue-500/20" />}
+                  </div>
+                  <span className="post-date">{post.date}</span>
+                </div>
               </div>
-            </div>
 
-            <div className="post-body">
-              <h4 className="post-title">{post.title}</h4>
-              <p className="post-content">{post.content}</p>
-            </div>
+              <div className="post-body">
+                <h4 className="post-title">{post.title}</h4>
+                <p className="post-content">{post.content}</p>
+              </div>
 
-            {/* Interaction Row */}
-            <div className="post-interaction-row">
-              <button 
-                className={`interact-btn ${post.liked ? 'liked' : ''}`} 
-                onClick={() => handleLikePost(post.id)}
-              >
-                <ThumbsUp size={14} /> {post.likes} Likes
-              </button>
-              <button 
-                className="interact-btn"
-                onClick={() => setActiveCommentPostId(activeCommentPostId === post.id ? null : post.id)}
-              >
-                <MessageSquare size={14} /> {post.comments.length} Comments
-              </button>
-              <button className="interact-btn" onClick={() => addNotification({ message: 'Feed share link copied to clipboard', type: 'info' })}>
-                <Share2 size={14} /> Share
-              </button>
-            </div>
-
-            {/* Comments Expanded Section */}
-            <AnimatePresence>
-              {activeCommentPostId === post.id && (
-                <motion.div 
-                  className="post-comments-panel"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
+              {/* Interaction Row */}
+              <div className="post-interaction-row">
+                <button 
+                  className={`interact-btn ${post.liked ? 'liked' : ''}`} 
+                  onClick={() => handleLikePost(post.id)}
                 >
-                  <div className="comments-list">
-                    {post.comments.map((c, cIdx) => (
-                      <div key={cIdx} className="comment-row">
-                        <span className="comment-sender">{c.sender}:</span>
-                        <span className="comment-text">{c.text}</span>
-                      </div>
-                    ))}
-                    {post.comments.length === 0 && (
-                      <div className="no-comments-msg">No comments yet. Write the first response!</div>
-                    )}
-                  </div>
-                  
-                  <div className="comment-input-form">
-                    <input 
-                      type="text" 
-                      placeholder="Write comment..."
-                      value={commentInput}
-                      onChange={e => setCommentInput(e.target.value)}
-                    />
-                    <button onClick={() => handleAddComment(post.id)}>Post</button>
-                  </div>
-                </motion.div>
+                  <ThumbsUp size={14} /> {post.likes} Likes
+                </button>
+                <button 
+                  className="interact-btn"
+                  onClick={() => setActiveCommentPostId(activeCommentPostId === post.id ? null : post.id)}
+                >
+                  <MessageSquare size={14} /> {post.comments.length} Comments
+                </button>
+                <button className="interact-btn" onClick={() => addNotification({ message: 'Feed share link copied to clipboard', type: 'info' })}>
+                  <Share2 size={14} /> Share
+                </button>
+              </div>
+
+              {/* Comments Expanded Section */}
+              <AnimatePresence>
+                {activeCommentPostId === post.id && (
+                  <motion.div 
+                    className="post-comments-panel"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                  >
+                    <div className="comments-list">
+                      {post.comments.map((c, cIdx) => (
+                        <div key={cIdx} className="comment-row">
+                          <span className="comment-sender">{c.sender}:</span>
+                          <span className="comment-text">{c.text}</span>
+                        </div>
+                      ))}
+                      {post.comments.length === 0 && (
+                        <div className="no-comments-msg">No comments yet. Write the first response!</div>
+                      )}
+                    </div>
+                    
+                    <div className="comment-input-form">
+                      <input 
+                        type="text" 
+                        placeholder="Write comment..."
+                        value={commentInput}
+                        onChange={e => setCommentInput(e.target.value)}
+                      />
+                      <button onClick={() => handleAddComment(post.id)}>Post</button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))
+        ) : (
+          /* Render Notifications Feed! */
+          <div className="notifications-feed-wrap">
+            <AnimatePresence mode="popLayout">
+              {notifications.length > 0 ? (
+                notifications.map((notif) => (
+                  <motion.div 
+                    key={notif.id}
+                    className={`comm-notif-item-row ${notif.type}`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    layout
+                  >
+                    <div className="comm-notif-icon-wrap">
+                      {notif.type === 'error' && <X size={15} className="text-red-500" />}
+                      {notif.type === 'warning' && <AlertTriangle size={15} className="text-amber-500" />}
+                      {notif.type === 'success' && <CheckCircle size={15} className="text-emerald-500" />}
+                      {notif.type === 'info' && <Info size={15} className="text-cyan-500" />}
+                      {notif.type === 'broadcast' && <Radio size={15} className="text-purple-500 animate-pulse" />}
+                    </div>
+                    <div className="comm-notif-item-content">
+                      <p>{notif.message}</p>
+                      <span className="comm-notif-time">Just now</span>
+                    </div>
+                    <button className="comm-notif-dismiss" onClick={() => dismissNotification(notif.id)}>
+                      <X size={13} />
+                    </button>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="empty-notifications-card glass-panel" style={{ padding: '3rem 2rem', textAlign: 'center', borderRadius: '24px' }}>
+                  <BellOff size={40} style={{ color: 'var(--color-text-muted)', marginBottom: '1rem', opacity: 0.5, marginInline: 'auto' }} />
+                  <h4 style={{ fontWeight: 700, color: '#fff', fontSize: '1rem' }}>Your Feed is Clear</h4>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', marginTop: '0.5rem', maxWidth: '300px', marginInline: 'auto' }}>
+                    Important classroom announcements and doubt updates will arrive here.
+                  </p>
+                </div>
               )}
             </AnimatePresence>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Ask Doubt Modal */}
